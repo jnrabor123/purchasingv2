@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/xampp/htdocs/test/application/view/admin/index.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/view/template/header.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/config/route.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/config/database.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/model/Admin_m.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/view/template/footer.php</file>
+            <file>file:/C:/xampp/htdocs/test/assets/blank.html</file>
+            <file>file:/C:/xampp/htdocs/test/assets/scripts/admin/index.js</file>
+            <file>file:/C:/xampp/htdocs/test/application/library/FDTP_Model.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/controller/Admin.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/library/FDTP_Db.php</file>
+            <file>file:/C:/xampp/htdocs/test/application/controller/FDTP_Controller.php</file>
+        </group>
+    </open-files>
+</project-private>

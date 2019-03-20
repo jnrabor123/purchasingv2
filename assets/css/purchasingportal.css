@@ -1,0 +1,101 @@
+/* 
+    Document   : purchasingportal
+    Created on : Oct 18, 2018, 2:57:39 PM
+    Author     : fp171005
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root 
+{ 
+    display: block;
+}
+
+
+body
+{
+    background:
+    radial-gradient(circle at 6.7% 75%,
+    #d2def9,
+    #b3e6ff 70.71%);
+}
+
+.purchasing-body{
+
+    background: white;
+    border-radius: 25px;
+    padding: 5px; 
+    width:100%;
+    padding-top:20px;
+
+}
+.my-auto span[data-text="*"]:before { content: '';color:WHITE;}
+.bg-dark{
+    background: radial-gradient(circle at 6.7% 50%, #006699, #00f2ff 50.00%);
+}
+
+.sidebar .profile-image 
+{   
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+
+}
+.sidebar .profile-image img 
+{
+    border-radius: 100%;
+    max-width: 100%;
+    margin-bottom: 10px; 
+}
+
+.sidebar  .text-wrapper 
+{
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+    max-width: 100%;
+    text-align: center;
+    margin:0;
+}
+
+.sidebar  .profile-name
+{
+    font-size:20px;
+}
+
+.sidebar
+{
+    background: #3d3d3d;
+
+}
+.sidebar .nav-item   .side-btn-link{
+    color:#e8e8e8;
+
+}
+.text-center
+{
+    text-align: center !important; 
+}
+
+.top-profile-image{
+
+    width:45px;
+}
+
+.profile-text-right{
+    color:#232323;
+    font-weight: bold;
+}
+
+.navbar-brand{
+    font-weight: bold;
+
+
+}
+
