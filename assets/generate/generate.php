@@ -426,7 +426,7 @@ $code = $_GET["code"];
 				cache: false,
 				success: function (data)
 				{
-					console.log("");
+					console.log("working");
 				},
 				error: function(data) 
 	            {

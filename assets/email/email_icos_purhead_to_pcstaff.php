@@ -2,9 +2,9 @@
 
 	require 'email_header.php';
 	
-	$u = '1';
-	$p = '1';
-	$control_no = 'CN-19-001';
+	$u = $_POST['u'];
+	$p = $_POST['u'];
+	$control_no = $_POST['control_no'];
 
 	$data = array();
 	
