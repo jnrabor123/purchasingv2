@@ -99,20 +99,19 @@ require_once APPPATH . 'view/template/header.php';
 							<table class="table table-bordered" id="tblMonitoring" width="100%" cellspacing="0">
 								<thead>
 									<tr align='center'>
-										<th rowspan="2">Action</th>
-										<th colspan="6">Request List</th>
-										<th colspan="3">Approval</th>
+										<th width="15%" rowspan="2">Action</th>
+										<th width="55%" colspan="6">Request List</th>
+										<th width="30%" colspan="2">Approval</th>
 									</tr>
 									<tr align='center'>
-										<th width="%">Control No.</th>
-										<th width="%">Requestor</th>
-										<th width="%">Date</th>
-										<th width="%">Type</th>
-										<th width="%">Supplier</th>
-										<th width="%">Status</th>
-										<th width="%">Section Superior</th>
-										<th width="%">PC Incharge</th>
-										<th width="%">PCWH Superior</th>
+										<th>Control No.</th>
+										<th>Requestor</th>
+										<th>Date</th>
+										<th>Type</th>
+										<th>Supplier</th>
+										<th>Status</th>
+										<th>Section Superior</th>
+										<th>PC Incharge</th>
 									</tr>
 								</thead>
 							</table>
@@ -214,6 +213,25 @@ require_once APPPATH . 'view/template/header.php';
 							</tbody>
 						</table>
 						</div>
+					</div>
+
+					<div class="col-sm-4 col-md-4 col-lg-4">
+						<br/>
+						<label class="color-red">APPROVED BY</label><br/>
+						<textarea class="design" rows="2" id="txt_approved_by" style="resize: none;" readonly></textarea>
+						<input class="design" type="text" id="txt_approved_date" readonly /><br/>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4">
+						<br/>
+						<label class="color-red">RECEIVED BY</label><br/>
+						<textarea class="design" rows="2" id="txt_received_by" style="resize: none;" readonly></textarea>
+						<input class="design" type="text" id="txt_received_date" readonly /><br/>
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4">
+						<br/>
+						<label class="color-red">REJECTED BY</label><br/>
+						<textarea class="design" rows="2" id="txt_rejected_by" style="resize: none;" readonly></textarea>
+						<input class="design" type="text" id="txt_rejected_date" readonly /><br/>
 					</div>
 
 

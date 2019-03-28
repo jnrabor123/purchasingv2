@@ -194,6 +194,7 @@ var Cancellationorder = (function ()
 			 dataForm.append('filesssss', $("#file_upload").prop('files')[0]);
 			 dataForm.append('session_id', $('#session_id').val());
 			 dataForm.append('generate_code', Cancellationorder.generate_code());
+			 dataForm.append('session_section', $('#session_section').val());
 
 			 Cancellationorder.run_waitMe("loading_upload");
 
@@ -238,7 +239,8 @@ var Cancellationorder = (function ()
             data :
             {
             	type : type,
-            	generate_code : generate_code
+            	generate_code : generate_code,
+            	section : $('#session_section').val()
             },
             dataType : "json",
             success: function (result)

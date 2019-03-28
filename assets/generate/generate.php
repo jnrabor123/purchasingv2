@@ -129,9 +129,17 @@ $code = $_GET["code"];
 
 			      </div>
 
-			      <div class="panel-footer" style="border-radius: 0px 0px 20px 20px; background-color: #dc3545; height: 50px;">
+			      <div class="panel-footer" style="border-radius: 0px 0px 20px 20px; background-color: #dc3545; height: 90px;">
 			      	<div class="col-sm-12">
 			      		<center>
+			      			<select id="select_head" style="width: 20%; text-align-last: center;">
+			      				<option val=''>CHOOSE</option>
+			      				<option>CRISCELDA FLORES</option>
+			      				<option>MAJALHANIE TORIA</option>
+			      				<option>RUSSEL CAMBAL</option>
+			      				<option>LUNINGNING BAZAR</option>
+			      			</select>
+			      			<br/><br/>
 			      			<input type="button" id="btn_approve" name="btn_approve" class="btn btn-danger" value="APPROVE" style="background-color: #fff; color: #dc3545;" onclick="Generate.click_approve();" />
 			      			<input type="button" id="btn_reject" name="btn_reject" class="btn btn-danger" value="REJECT" style="background-color: #fff; color: #dc3545;" onclick="Generate.click_reject();" />
 			      		</center>
@@ -266,7 +274,7 @@ $code = $_GET["code"];
 					
 					$("#tblMonitoring tbody").html(tr);
 
-					if(status == "FOR APPROVAL - PURCHASING")
+					if(status.indexOf("FOR APPROVAL") != -1)
 					{
 						$('#div_session').show();
 						$('#div_expired').hide();
@@ -352,63 +360,75 @@ $code = $_GET["code"];
 
 		this_Generate.click_approve = function()
 		{
-			if(confirm("Are you sure to proceed?"))
-	  		{
-		  		Generate.run_waitMe();
+			var head = $('#select_head').val();
+			if(head != 'CHOOSE')
+			{
+				if(confirm("Are you sure to proceed?"))
+		  		{
+			  		Generate.run_waitMe();
 
-		  		$.ajax({
-		  			type: 'POST',
-					url: '../../application/controller/Cancellationorder.php?action=approved_by_purchasing',
-					data: 
-					{
-						code : "<?php echo $code; ?>",
-						name : "CRISCELDA FLORES"
-					},
-					dataType: 'json',
-					cache: false,
-					success: function (data)
-					{
-						Generate.load_generate();
-						Generate.auto_email();
-						alert("Successfully Approved!");
-						$('.loading').waitMe("hide");
-					},
-					error: function(data) 
-		            {
-		              console.log(data);
-		            }
-		  		});
+			  		$.ajax({
+			  			type: 'POST',
+						url: '../../application/controller/Cancellationorder.php?action=approved_by_purchasing',
+						data: 
+						{
+							code : "<?php echo $code; ?>",
+							name : head
+						},
+						dataType: 'json',
+						cache: false,
+						success: function (data)
+						{
+							Generate.load_generate();
+							Generate.auto_email();
+							alert("Successfully Approved!");
+							$('.loading').waitMe("hide");
+						},
+						error: function(data) 
+			            {
+			              console.log(data);
+			            }
+			  		});
+		  		}
 	  		}
+	  		else
+	  			alert('SELECT YOUR NAME!');
 		};
 
 		this_Generate.click_reject = function()
 		{
-	  		if(confirm("Are you sure to proceed?"))
-	  		{
-		  		Generate.run_waitMe();
+			var head = $('#select_head').val();
+			if(head != 'CHOOSE')
+			{
+		  		if(confirm("Are you sure to proceed?"))
+		  		{
+			  		Generate.run_waitMe();
 
-		  		$.ajax({
-		  			type: 'POST',
-					url: '../../application/controller/Cancellationorder.php?action=rejected_by_purchasing',
-					data: 
-					{
-						code : "<?php echo $code; ?>",
-						name : "CRISCELDA FLORES"
-					},
-					dataType: 'json',
-					cache: false,
-					success: function (data)
-					{
-						$('.loading').waitMe("hide");
-						Generate.load_generate();
-						alert("Successfully Rejected!");
-					},
-					error: function(data) 
-		            {
-		              console.log(data);
-		            }
-		  		});
-	  		}
+			  		$.ajax({
+			  			type: 'POST',
+						url: '../../application/controller/Cancellationorder.php?action=rejected_by_purchasing',
+						data: 
+						{
+							code : "<?php echo $code; ?>",
+							name : head
+						},
+						dataType: 'json',
+						cache: false,
+						success: function (data)
+						{
+							$('.loading').waitMe("hide");
+							Generate.load_generate();
+							alert("Successfully Rejected!");
+						},
+						error: function(data) 
+			            {
+			              console.log(data);
+			            }
+			  		});
+		  		}
+		  	}
+		  	else
+	  			alert('SELECT YOUR NAME!');
 		};
 
 		this_Generate.auto_email = function()
@@ -418,8 +438,8 @@ $code = $_GET["code"];
 				url: '../../assets/email/email_icos_purhead_to_pcstaff.php',
 				data: 
 				{
-					u : "1",
-					p : "1",
+					u : "1", // 
+					p : "1", // 
 					control_no : $('#control_no').val()
 				},
 				dataType: 'json',

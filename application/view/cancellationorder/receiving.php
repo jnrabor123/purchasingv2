@@ -225,6 +225,7 @@ require_once APPPATH . 'view/template/header.php';
         	<button type="button" class="btn btn-outline-danger" onclick="Receiving.finish_encode();"><span class="fas fa-flag"></span> RECEIVED AND ENCODED</button>
           	<input type="hidden" id="txt_id" />
           	<input type="hidden" id="txt_name" value="<?php echo $_SESSION['name'] ?>" />
+          	<input type="hidden" id="txt_requestor">
         </div>
         
       </div>

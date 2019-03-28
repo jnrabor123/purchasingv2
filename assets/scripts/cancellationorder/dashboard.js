@@ -80,6 +80,10 @@ var Dashboard = (function ()
 
 					button += "<button type='button' title='View' onclick='Dashboard.view_details(" + this.id + ");' class='btn btn-outline-danger btn-sm'><span class='fa fa-eye'></span></button> ";
 					button += "<button type='button' title='Download' onclick='Dashboard.download_details(" + this.id + ");' class='btn btn-outline-danger btn-sm'><span class='fa fa-download'></span></button> ";
+					if(this.status == 'RECEIVED AND ENCODED')
+						button += "<button type='button' title='PDF' onclick='Dashboard.view_pdf(" + this.id + ");' class='btn btn-outline-danger btn-sm'><span class='fa fa-file-pdf'></span></button> ";
+					else
+						button += "<button type='button' title='PDF' class='btn btn-outline-danger btn-sm' disabled><span class='fa fa-file-pdf'></span></button> ";
 
 					tr +=
 							"<tr align='center'>" +
@@ -92,7 +96,6 @@ var Dashboard = (function ()
 							"<td>" + this.status + "</td>" +
 							"<td>" + this_Dashboard.icon(this.approved_by_purchasing, this.status) + "</td>" +
 							"<td>" + this_Dashboard.icon(this.received_by, this.status) + "</td>" +
-							"<td>" + this_Dashboard.icon(this.approved_by_pc, this.status) + "</td>" +
 							"</tr>";
 				});
 				
@@ -158,7 +161,14 @@ var Dashboard = (function ()
 					$('#request_type').val(this.request_type);
 					$('#supplier').val(this.supplier);
 					// $('#txt_id').val(this.id);
-					
+
+					$('#txt_approved_by').val(this.approved_by_purchasing);
+					$('#txt_approved_date').val(this.date_approved_by_purchasing);
+					$('#txt_received_by').val(this.received_by);
+					$('#txt_received_date').val(this.date_received_by);
+					$('#txt_rejected_by').val(this.rejected_by);
+					$('#txt_rejected_date').val(this.date_rejected);
+
 					// (this.a_status == "FOR RECEIVED - PC") ? $('#btn_received_encoded').show() : $('#btn_received_encoded').hide();
 
 					tr +=
@@ -241,34 +251,9 @@ var Dashboard = (function ()
 		});
 	};
 
-	this_Dashboard.finish_encode = function()
+	this_Dashboard.view_pdf = function(id)
 	{
-		// var id = $('#txt_id').val();
-		// var incharge = $('#txt_name').val();
-		// Dashboard.run_waitMe("loading_modal");
-		// $('.loading_modal').waitMe("hide");
-
-
-		// $.ajax({
-  		// 	type: 'POST',
-		// 	url: base_url + 'Cancellationorder.php?action=received_pc_incharge',
-		// 	data: 
-		// 	{
-		// 		id : id,
-		// 		incharge : incharge
-		// 	},
-		// 	dataType: 'json',
-		// 	cache: false,
-		// 	success: function (data)
-		// 	{
-
-		// 	},
-		// 	error: function(data)
-		// 	{
-
-		// 	}
-		// });
-		
+		window.open('../../../assets/pdf/ci_report.php?id=' + id + '&report=pdf', '_blank', "height=900,width=700px", 'toolbar=no');
 	};
 
 	return this_Dashboard;

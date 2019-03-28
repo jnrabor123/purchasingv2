@@ -4,8 +4,29 @@
 	
 	$type = $_POST["type"];
 	$generate_code = $_POST["generate_code"];
+	$section = $_POST['section'];
 
 	$data = array();
+
+	// EMAIL
+		switch ($section) 
+		{
+			case 'PURCHASING':
+				// $mail->AddAddress("criscelda.flores@ph.fujitsu.com");
+				// $mail->AddAddress("majalhanie.toria@ph.fujitsu.com");
+				break;
+			case 'PC':
+				// $mail->AddAddress("russel.cambal@ph.fujitsu.com");
+				// $mail->AddAddress("luningning.soterio@ph.fujitsu.com");
+				break;
+			case 'INHOUSE':
+				// $mail->AddAddress("criscelda.flores@ph.fujitsu.com");
+				break;
+			case 'ADMIN':
+				// $mail->AddCC("jerwyn.rabor@ph.fujitsu.com");
+				break;
+			
+		}
 	
 	$mail->AddBCC("jerwyn.rabor@ph.fujitsu.com");
 

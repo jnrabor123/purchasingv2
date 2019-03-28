@@ -27,7 +27,7 @@ class Cancellationorder_m extends FDTP_Model
 	// SELECT
 		public function load_dashboard()
 		{
-			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.approved_by_pc, a.status
+			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status
 				FROM tbl_request_slip a
 				INNER JOIN employee_accounts b ON (CAST(a.incharge AS integer) = b.id)
 				ORDER BY a.id DESC; ";
@@ -39,7 +39,7 @@ class Cancellationorder_m extends FDTP_Model
 
 		public function load_generate($code)
 		{
-			$query = "SELECT a.id as id, a.control_no, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.approved_by_pc, a.status, a.rejected_by, a.status,
+			$query = "SELECT a.id as id, a.control_no, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status, a.status,
 			b.part_no, b.rev, b.quantity, b.po_no, b.po_code, b.receipt_no, b.prod_code_no, b.delivery_date, b.supplier_answer, b.reason, b.id as id2
 			FROM tbl_request_slip a
 			INNER JOIN tbl_request_details b ON (a.id = b.tbl_request_slip_id)
@@ -57,7 +57,7 @@ class Cancellationorder_m extends FDTP_Model
 
 		public function load_generate_by_id($id)
 		{
-			$query = "SELECT a.id, a.control_no, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.approved_by_pc, a.status as a_status,
+			$query = "SELECT a.id, a.control_no, c.employee_email, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status as a_status, a.date_approved_by_purchasing, a.date_received_by, a.rejected_by, a.date_rejected,
 			b.part_no, b.rev, b.quantity, b.po_no, b.po_code, b.receipt_no, b.prod_code_no, b.delivery_date, b.supplier_answer, b.reason, b.status
 			FROM tbl_request_slip a
 			INNER JOIN tbl_request_details b ON (a.id = b.tbl_request_slip_id)
@@ -72,7 +72,7 @@ class Cancellationorder_m extends FDTP_Model
 
 		public function load_dashboard_by_receiving()
 		{
-			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.approved_by_pc, a.status
+			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status
 				FROM tbl_request_slip a
 				INNER JOIN employee_accounts b ON (CAST(a.incharge AS integer) = b.id)
 				WHERE a.status = 'FOR RECEIVING - PC'

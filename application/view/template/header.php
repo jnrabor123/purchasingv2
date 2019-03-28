@@ -174,7 +174,6 @@
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/dashboard.php">Dashboard</a>
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/request.php">Request</a>
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/receiving.php">Receiving</a>
-                        <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/approval.php">Approval</a>
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/reports.php">Reports</a>
                     </div>
                 </li>

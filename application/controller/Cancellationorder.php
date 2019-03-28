@@ -80,7 +80,7 @@ class Cancellationorder
 			[
 				'date_rejected'	=>	date('Y-m-d H:i'),
 				'rejected_by'	=>	$_POST['name'],
-				'status'	=>	"REJECTED - PURCHASING"
+				'status'	=>	"REJECTED"
 
 			];
 			
@@ -113,7 +113,7 @@ class Cancellationorder
 			[
 				'received_by' => $_POST['incharge'],
 				'date_received_by' => date('Y-m-d H:i'),
-				'status' => 'FOR APPROVAL - PC'
+				'status' => 'RECEIVED AND ENCODED'
 			];
 
 			$where = 

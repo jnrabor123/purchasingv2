@@ -26,9 +26,9 @@ var Receiving = (function ()
 		// alertify.warning('Success message');
 		// alertify.info('Success message');
 
-	//PUBLIC OBJECT TO BE RETURNED
+	// PUBLIC OBJECT TO BE RETURNED
 	var this_Receiving = {};
-	// var _section = '';
+	var _id = '';
 
 	this_Receiving.realtime = function()
 	{
@@ -136,6 +136,7 @@ var Receiving = (function ()
 					$('#request_type').val(this.request_type);
 					$('#supplier').val(this.supplier);
 					$('#txt_id').val(this.id);
+					$('#txt_requestor').val(this.employee_email);
 
 					if(this.status == "WAITING")
 					{
@@ -235,7 +236,26 @@ var Receiving = (function ()
 				alertify.success("Successfully Received!");
 				$('.loading_modal').waitMe("hide");
 				$('#view_modal').modal('hide');
+				this_Receiving.email_requestor(id);
 				Receiving.load_dashboard();
+			},
+			error: function(data)
+			{
+				console.log(data);
+			}
+		});
+	};
+
+	this_Receiving.email_requestor = function(id)
+	{
+		$.ajax({
+  			type: 'GET',
+			url: '../../../assets/pdf/ci_report.php?id=' + id + '&report=email',
+			dataType: 'json',
+			cache: false,
+			success: function (data)
+			{
+				alertify.success("Email Sent!");
 			},
 			error: function(data)
 			{

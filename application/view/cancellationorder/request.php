@@ -110,6 +110,8 @@ require_once APPPATH . 'view/template/header.php';
 													<option selected disabled>CHOOSE</option>
 													<option value="P.O ISSUANCE">P.O ISSUANCE</option>
 													<option value="P.O CANCELLATION">P.O CANCELLATION</option>
+													<option value="M.O ISSUANCE">M.O ISSUANCE</option>
+													<option value="M.O CANCELLATION">M.O CANCELLATION</option>
 												</select>
 											</div>
 
@@ -145,6 +147,7 @@ require_once APPPATH . 'view/template/header.php';
 
 										<!-- HIDDEN -->
 											<input type="hidden" id="session_id" name="session_id" value="<?php echo $_SESSION['incharge']; ?>" />
+											<input type="hidden" id="session_section" name="session_section" value="<?php echo strtoupper($_SESSION['section']); ?>" />
 											<input type="hidden" id="generate_code" name="generate_code" />
 									</div>
 

@@ -15,117 +15,6 @@ if($action == "insert_manual")
 			pg_query("BEGIN");
 
 			// CONTROL NO
-			$sqlselect = "SELECT control_no FROM tbl_request_slip ORDER BY id DESC LIMIT 1 ";
-			$queryselect = pg_query($connection, $sqlselect);
-			$count = pg_num_rows($queryselect);
-
-			if($count == 0)
-			{
-				$newvalue = "CN-" . date("y") . "-001";
-			}
-			else
-			{
-				$rowselect = pg_fetch_row($queryselect);
-				
-				$explode = explode("-", $rowselect[0]);
-
-				if($explode[1] == date("y"))
-				{
-					$counter = str_pad(($explode[2] + 1), 3, "0", STR_PAD_LEFT); 
-					$newvalue = $explode[0] . "-" . $explode[1] . "-" . $counter;
-				}
-				else
-					$newvalue = "CN-" . date("y") . "-001";
-			}
-			$controlnonew = $newvalue;
-
-
-			// INSERT HEADER
-			$supplier = $_POST['txtRequestSupplier'];
-			$request_date = date('Y-m-d H:i');
-			$request_type = $_POST['txtRequestType'];
-			$incharge = $_POST['session_id'];
-			$status = 'FOR APPROVAL - PURCHASING';
-
-			$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status') RETURNING id; ";
-			$result = pg_query($connection, $tbl_request_slip); 
-
-			$row = pg_fetch_row($result);
-
-			$tbl_request_slip_id = $row[0];
-
-			// UPDATE
-			$generate_code = $_POST['generate_code'];
-
-			$updatecn = "UPDATE tbl_request_slip SET control_no = '$controlnonew', generate_code = '$generate_code' WHERE id = '$tbl_request_slip_id' ";
-			pg_query($connection, $updatecn);
-
-			// INSERT BODY
-			$checker = false;
-			$loop = count($_POST['txt_partno']);
-			for ($i = 0; $i < $loop; $i++) 
-			{
-				$part_no = $_POST['txt_partno'][$i];
-				$rev = $_POST['txt_rev'][$i];
-				$quantity = $_POST['txt_qty'][$i];
-				$po_no = $_POST['txt_pono'][$i];
-				$po_code = $_POST['txt_pocode'][$i];
-				$receipt_no = $_POST['txt_receiptno'][$i];
-				$prod_code_no = $_POST['txt_prodorder'][$i];
-				$delivery_date = $_POST['txt_deliverydate'][$i];
-				$reason = $_POST['txt_reason'][$i];
-				$status = 'WAITING';
-
-				if(isset($_POST['questionaire' . ($i + 1)]))
-					$supplier_answer = $_POST['questionaire' . ($i + 1)];
-				else
-					$supplier_answer = "";
-
-				$tbl_request_details = "INSERT INTO tbl_request_details(tbl_request_slip_id, part_no, rev, quantity, po_no, po_code, receipt_no, prod_code_no, delivery_date, supplier_answer, reason, status) VALUES('$tbl_request_slip_id', '$part_no', '$rev', '$quantity', '$po_no', '$po_code', '$receipt_no', '$prod_code_no', '$delivery_date', '$supplier_answer', '$reason', '$status'); ";
-				$result = pg_query($connection, $tbl_request_details); 
-
-				if(!$result)
-	             	$checker = true;
-			}
-
-			if($checker)
-                echo json_encode("With error. Maybe due to apostrophe symbol. ");
-            else
-            {
-                $finally = array();
-            	array_push($finally, $controlnonew);
-            	array_push($finally, $request_type);
-            	array_push($finally, $generate_code);
-                echo json_encode($finally);
-	            pg_query("COMMIT");
-            }
-
-		} 
-		catch (Exception $e) 
-		{
-			pg_query("ROLLBACK");
-			echo json_encode("error");
-		}
-}
-else if($action == "upload")
-{
-	if(isset($_FILES['filesssss']['name'])) 
-	{
-		$tmpfname = $_FILES['filesssss']['tmp_name'];
-	    $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
-	    $excelObj = $excelReader->load($tmpfname);
-	    $worksheet = $excelObj->getActiveSheet();
-	    $lastRow = $worksheet->getHighestRow();
-
-
-	    if($lastRow !== 1)
-        {
-
-        	try 
-			{
-				pg_query("BEGIN");
-
-				// CONTROL NO
 				$sqlselect = "SELECT control_no FROM tbl_request_slip ORDER BY id DESC LIMIT 1 ";
 				$queryselect = pg_query($connection, $sqlselect);
 				$count = pg_num_rows($queryselect);
@@ -150,72 +39,187 @@ else if($action == "upload")
 				}
 				$controlnonew = $newvalue;
 
-	            $checker = false;
-
-	            $supplier = strtoupper($worksheet->getCell('B5')->getValue());
-			    $request_type = strtoupper($worksheet->getCell('C5')->getValue());
+			// INSERT HEADER
+				$supplier = $_POST['txtRequestSupplier'];
 				$request_date = date('Y-m-d H:i');
-				$incharge = $_POST["session_id"];
-				$status = 'FOR APPROVAL - PURCHASING';
+				$request_type = $_POST['txtRequestType'];
+				$incharge = $_POST['session_id'];
+				$section = $_POST['session_section'];
+				$status = 'FOR APPROVAL - ' . $section;
 
 				$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status') RETURNING id; ";
-				$insert_check = pg_query($connection, $tbl_request_slip); 
+				$result = pg_query($connection, $tbl_request_slip); 
 
-				if(!$insert_check)
-	             	$checker = true;
-
-				$row = pg_fetch_row($insert_check);
+				$row = pg_fetch_row($result);
 
 				$tbl_request_slip_id = $row[0];
 
-				// UPDATE
+			// UPDATE
 				$generate_code = $_POST['generate_code'];
 
 				$updatecn = "UPDATE tbl_request_slip SET control_no = '$controlnonew', generate_code = '$generate_code' WHERE id = '$tbl_request_slip_id' ";
-				$update_check = pg_query($connection, $updatecn);
+				pg_query($connection, $updatecn);
 
-				if(!$update_check)
-	             	$checker = true;
+			// INSERT BODY
+				$checker = false;
+				$loop = count($_POST['txt_partno']);
+				for ($i = 0; $i < $loop; $i++) 
+				{
+					$part_no = $_POST['txt_partno'][$i];
+					$rev = $_POST['txt_rev'][$i];
+					$quantity = $_POST['txt_qty'][$i];
+					$po_no = $_POST['txt_pono'][$i];
+					$po_code = $_POST['txt_pocode'][$i];
+					$receipt_no = $_POST['txt_receiptno'][$i];
+					$prod_code_no = $_POST['txt_prodorder'][$i];
+					$delivery_date = $_POST['txt_deliverydate'][$i];
+					$reason = $_POST['txt_reason'][$i];
+					$status = 'WAITING';
 
-			    for ($row = 5; $row <= $lastRow; $row++) 
-			    { 
-			    	$part_no = strtoupper($worksheet->getCell('E' . $row)->getValue());
-			    	$rev = strtoupper($worksheet->getCell('F' . $row)->getValue());
+					if(isset($_POST['questionaire' . ($i + 1)]))
+						$supplier_answer = $_POST['questionaire' . ($i + 1)];
+					else
+						$supplier_answer = "";
 
-			    	if(strlen($rev) == 1)
-			    		$rev = "0" . $rev;
+					$tbl_request_details = "INSERT INTO tbl_request_details(tbl_request_slip_id, part_no, rev, quantity, po_no, po_code, receipt_no, prod_code_no, delivery_date, supplier_answer, reason, status) VALUES('$tbl_request_slip_id', '$part_no', '$rev', '$quantity', '$po_no', '$po_code', '$receipt_no', '$prod_code_no', '$delivery_date', '$supplier_answer', '$reason', '$status'); ";
+					$result = pg_query($connection, $tbl_request_details); 
 
-			    	$quantity = strtoupper($worksheet->getCell('G' . $row)->getValue());
-			    	$po_no = strtoupper($worksheet->getCell('H' . $row)->getValue());
-			    	$po_code = strtoupper($worksheet->getCell('I' . $row)->getValue());
-			    	$receipt_no = strtoupper($worksheet->getCell('J' . $row)->getValue());
-			    	$prod_code_no = strtoupper($worksheet->getCell('K' . $row)->getValue());
-			    	$delivery_date = $worksheet->getCell('L' . $row)->getValue();
-			    	$supplier_answer = strtoupper($worksheet->getCell('M' . $row)->getValue());
-			    	$reason = strtoupper($worksheet->getCell('N' . $row)->getValue());
-			    	$status = "WAITING";
+					if(!$result)
+		             	$checker = true;
+				}
 
-			        if($part_no != '')
-			        {
-				        $sql = "INSERT INTO tbl_request_details(tbl_request_slip_id, part_no, rev, quantity, po_no, po_code, receipt_no, prod_code_no, delivery_date, supplier_answer, reason, status) VALUES('$tbl_request_slip_id', '$part_no', '$rev', '$quantity', '$po_no', '$po_code', '$receipt_no', '$prod_code_no', '$delivery_date', '$supplier_answer', '$reason', '$status'); ";
-				        $result = pg_query($connection, $sql); 
-
-				        if(!$result)
-	             			$checker = true;
-			    	}
-			    }
-
-			    if($checker)
-	                echo json_encode("Success with error. Maybe due to apostrophe symbol. ");
+			// OUTPUT
+				if($checker)
+	                echo json_encode("With error. Maybe due to apostrophe symbol. ");
 	            else
 	            {
-	            	$finally = array();
+	                $finally = array();
 	            	array_push($finally, $controlnonew);
 	            	array_push($finally, $request_type);
 	            	array_push($finally, $generate_code);
 	                echo json_encode($finally);
 		            pg_query("COMMIT");
 	            }
+
+		} 
+		catch (Exception $e) 
+		{
+			pg_query("ROLLBACK");
+			echo json_encode("error");
+		}
+}
+else if($action == "upload")
+{
+	if(isset($_FILES['filesssss']['name'])) 
+	{
+		$tmpfname = $_FILES['filesssss']['tmp_name'];
+	    $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
+	    $excelObj = $excelReader->load($tmpfname);
+	    $worksheet = $excelObj->getActiveSheet();
+	    $lastRow = $worksheet->getHighestRow();
+
+	    if($lastRow !== 1)
+        {
+
+        	try 
+			{
+				pg_query("BEGIN");
+
+				// CONTROL NO
+					$sqlselect = "SELECT control_no FROM tbl_request_slip ORDER BY id DESC LIMIT 1 ";
+					$queryselect = pg_query($connection, $sqlselect);
+					$count = pg_num_rows($queryselect);
+
+					if($count == 0)
+					{
+						$newvalue = "CN-" . date("y") . "-001";
+					}
+					else
+					{
+						$rowselect = pg_fetch_row($queryselect);
+						
+						$explode = explode("-", $rowselect[0]);
+
+						if($explode[1] == date("y"))
+						{
+							$counter = str_pad(($explode[2] + 1), 3, "0", STR_PAD_LEFT); 
+							$newvalue = $explode[0] . "-" . $explode[1] . "-" . $counter;
+						}
+						else
+							$newvalue = "CN-" . date("y") . "-001";
+					}
+					$controlnonew = $newvalue;
+
+				// INSERT HEADER 
+		            $checker = false;
+
+		            $supplier = strtoupper($worksheet->getCell('B5')->getValue());
+				    $request_type = strtoupper($worksheet->getCell('C5')->getValue());
+					$request_date = date('Y-m-d H:i');
+					$incharge = $_POST["session_id"];
+					$section = $_POST['session_section'];
+					$status = 'FOR APPROVAL - ' . $section;
+
+					$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status') RETURNING id; ";
+					$insert_check = pg_query($connection, $tbl_request_slip); 
+
+					if(!$insert_check)
+		             	$checker = true;
+
+					$row = pg_fetch_row($insert_check);
+
+					$tbl_request_slip_id = $row[0];
+
+				// UPDATE
+					$generate_code = $_POST['generate_code'];
+
+					$updatecn = "UPDATE tbl_request_slip SET control_no = '$controlnonew', generate_code = '$generate_code' WHERE id = '$tbl_request_slip_id' ";
+					$update_check = pg_query($connection, $updatecn);
+
+				// INSERT BODY
+					if(!$update_check)
+		             	$checker = true;
+
+				    for ($row = 5; $row <= $lastRow; $row++) 
+				    {
+				    	$part_no = strtoupper($worksheet->getCell('E' . $row)->getValue());
+				    	$rev = strtoupper($worksheet->getCell('F' . $row)->getValue());
+
+				    	if(strlen($rev) == 1)
+				    		$rev = "0" . $rev;
+
+				    	$quantity = strtoupper($worksheet->getCell('G' . $row)->getValue());
+				    	$po_no = strtoupper($worksheet->getCell('H' . $row)->getValue());
+				    	$po_code = strtoupper($worksheet->getCell('I' . $row)->getValue());
+				    	$receipt_no = strtoupper($worksheet->getCell('J' . $row)->getValue());
+				    	$prod_code_no = strtoupper($worksheet->getCell('K' . $row)->getValue());
+				    	$delivery_date = $worksheet->getCell('L' . $row)->getValue();
+				    	$supplier_answer = strtoupper($worksheet->getCell('M' . $row)->getValue());
+				    	$reason = strtoupper($worksheet->getCell('N' . $row)->getValue());
+				    	$status = "WAITING";
+
+				        if($part_no != '')
+				        {
+					        $sql = "INSERT INTO tbl_request_details(tbl_request_slip_id, part_no, rev, quantity, po_no, po_code, receipt_no, prod_code_no, delivery_date, supplier_answer, reason, status) VALUES('$tbl_request_slip_id', '$part_no', '$rev', '$quantity', '$po_no', '$po_code', '$receipt_no', '$prod_code_no', '$delivery_date', '$supplier_answer', '$reason', '$status'); ";
+					        $result = pg_query($connection, $sql); 
+
+					        if(!$result)
+		             			$checker = true;
+				    	}
+				    }
+
+				// OUTPUT 
+				    if($checker)
+		                echo json_encode("Success with error. Maybe due to apostrophe symbol. ");
+		            else
+		            {
+		            	$finally = array();
+		            	array_push($finally, $controlnonew);
+		            	array_push($finally, $request_type);
+		            	array_push($finally, $generate_code);
+		                echo json_encode($finally);
+			            pg_query("COMMIT");
+		            }
 
         	}
         	catch (Exception $e) 
