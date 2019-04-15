@@ -6,26 +6,32 @@
 	$generate_code = $_POST["generate_code"];
 	$section = $_POST['section'];
 
+	$where = '';
+
+	switch ($section) 
+	{
+		case 'PURCHASING':
+			$where = "employee_section = 'purchasing' AND employee_group = 'DELIVERY' ";
+			break;
+		case 'PRESS':
+			$where = "employee_section = 'press' ";
+			break;
+		case 'PC':
+			$where = "employee_section = 'pc' ";
+			break;
+
+		default:
+			$where = "employee_section = 'admin' ";
+	}
+
 	$data = array();
 
 	// EMAIL
-		switch ($section) 
+		$sql = "SELECT employee_email, employee_position FROM employee_accounts WHERE " . $where . " AND employee_status = 'active' AND employee_position != 'staff' ";
+		$result = pg_query($connection, $sql); 
+		while($row = pg_fetch_array($result))
 		{
-			case 'PURCHASING':
-				// $mail->AddAddress("criscelda.flores@ph.fujitsu.com");
-				// $mail->AddAddress("majalhanie.toria@ph.fujitsu.com");
-				break;
-			case 'PC':
-				// $mail->AddAddress("russel.cambal@ph.fujitsu.com");
-				// $mail->AddAddress("luningning.soterio@ph.fujitsu.com");
-				break;
-			case 'INHOUSE':
-				// $mail->AddAddress("criscelda.flores@ph.fujitsu.com");
-				break;
-			case 'ADMIN':
-				// $mail->AddCC("jerwyn.rabor@ph.fujitsu.com");
-				break;
-			
+			$mail->AddAddress($row[0]);
 		}
 	
 	$mail->AddBCC("jerwyn.rabor@ph.fujitsu.com");

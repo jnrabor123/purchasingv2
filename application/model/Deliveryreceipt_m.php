@@ -28,7 +28,11 @@ class Deliveryreceipt_m extends FDTP_Model
 
 	public function load_data()
 	{
-		$query = "SELECT * FROM tbl_idr WHERE status = 'FOR RECEIVING' ORDER BY id DESC; ";
+		// $query = "SELECT * FROM tbl_idr WHERE status = 'FOR RECEIVING' ORDER BY id DESC; ";
+		$query = "SELECT a.id, a.attention, a.employee_no, a.control_no, a.status, a.request_date, b.employee_name FROM public.tbl_idr a
+					LEFT JOIN employee_accounts b
+					ON (SPLIT_PART(a.attention, '/', 1) = b.employee_email)
+					WHERE a.status = 'FOR RECEIVING' ORDER BY a.id DESC; ";
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
 		$data = $stmt->fetchAll();
@@ -67,7 +71,11 @@ class Deliveryreceipt_m extends FDTP_Model
 
 	public function load_monitoring()
 	{
-		$query = "SELECT * FROM tbl_idr ORDER BY id DESC; ";
+		// $query = "SELECT * FROM tbl_idr ORDER BY id DESC; ";
+		$query = "SELECT a.id, a.employee_no, b.employee_name, a.control_no, a.status, a.request_date, a.received_date, a.remarks FROM tbl_idr a
+				LEFT JOIN employee_accounts b
+				ON (SPLIT_PART(a.attention, '/', 1) = b.employee_email)
+				ORDER BY id DESC; ";
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
 		$data = $stmt->fetchAll();
@@ -76,7 +84,13 @@ class Deliveryreceipt_m extends FDTP_Model
 
 	public function load_monitoring_data($id)
 	{
-		$query = "SELECT * FROM tbl_idr_request WHERE tbl_idr_id = ? ";
+		// $query = "SELECT * FROM tbl_idr_request WHERE tbl_idr_id = ? ";
+		$query = "SELECT a.id, a.tbl_idr_id, a.part_no, a.rev, a.qty, a.actual, a.supplier, a.dr_inv_no, a.remarks, a.status, a.received_by, a.received_date, c.employee_name FROM tbl_idr_request a
+				INNER JOIN tbl_idr b
+				ON (a.tbl_idr_id = b.id)
+				LEFT JOIN employee_accounts c
+				ON (SPLIT_PART(b.attention, '/', 1) = c.employee_email)
+				WHERE a.tbl_idr_id = ? ";
 		
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute([$id]);
@@ -96,7 +110,7 @@ class Deliveryreceipt_m extends FDTP_Model
 
 	public function load_monitoringrequest()
 	{
-		$query = "SELECT aa.id, bb.control_no, aa.part_no, aa.rev, aa.supplier, aa.status FROM tbl_idr_request AS aa LEFT JOIN tbl_idr AS bb ON (aa.tbl_idr_id = bb.id) ORDER BY aa.id DESC; ";
+		$query = "SELECT aa.id, bb.control_no, aa.part_no, aa.rev, aa.supplier, aa.dr_inv_no, aa.remarks, aa.status FROM tbl_idr_request AS aa LEFT JOIN tbl_idr AS bb ON (aa.tbl_idr_id = bb.id) ORDER BY aa.id DESC; ";
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute();
 		$data = $stmt->fetchAll();
@@ -105,7 +119,13 @@ class Deliveryreceipt_m extends FDTP_Model
 
 	public function load_receiving_data($id)
 	{
-		$query = "SELECT * FROM tbl_idr_request WHERE id = ? ";
+		// $query = "SELECT * FROM tbl_idr_request WHERE id = ? ";
+		$query = "SELECT a.id, a.tbl_idr_id, a.part_no, a.rev, a.qty, a.actual, a.supplier, a.dr_inv_no, a.remarks, a.status, a.received_by, a.received_date, c.employee_name FROM tbl_idr_request a
+				INNER JOIN tbl_idr b
+				ON (a.tbl_idr_id = b.id)
+				LEFT JOIN employee_accounts c
+				ON (SPLIT_PART(b.attention, '/', 1) = c.employee_email)
+				WHERE a.id = ? ";
 		
 		$stmt = $this->conn->prepare($query);
 		$stmt->execute([$id]);

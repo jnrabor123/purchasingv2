@@ -53,6 +53,18 @@
 <!-- Wait Me JS -->
 <script src="<?php echo base_url; ?>assets/vendor/waitme/waitMe.js" ></script>
 
+<!-- ROWS GORUP -->
+<script src="<?php echo base_url; ?>assets/vendor/datatables.net/js/fnstandingredraw.js" ></script>
+<!-- <script src="<?php echo base_url; ?>assets/vendor/datatables.net/js/jquery.dataTables.js" ></script> -->
+<!-- <script src="<?php echo base_url; ?>assets/vendor/datatables.net/js/jquery.dataTables.min.js" ></script> -->
+<script src="<?php echo base_url; ?>assets/vendor/datatables.net/js/jquery.dataTables.rowsGroup.js" ></script>
+
+<!-- BUTTON DATATABLES -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.flash.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.html5.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.print.min.js"></script>
+
 <script>
     //required input this
     var base_url = $('#base_url').val() + "application/controller/";

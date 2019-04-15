@@ -14,8 +14,6 @@ require_once APPPATH . 'view/template/header.php';
 
 <style>
 	
-
-
 </style>
 
 <div id="content-wrapper">
@@ -23,7 +21,7 @@ require_once APPPATH . 'view/template/header.php';
 	<div class="container-fluid">
 
 		<center>
-			<video style="border-radius: 20px; height: 500px; width: 60%; margin-top: 100px;" controls>
+			<video style="border-radius: 20px; height: 500px; width: 60%; margin-top: 50px;" controls>
 			   <source src="Happiness is helping others.mp4" type="video/mp4">
 			 	Your browser does not support the video tag.
 			</video> 

@@ -33,6 +33,12 @@ class Cancellationorder
 			return $data;
 		}
 
+		public function load_dashboard_partno()
+		{
+			$data = $this->cancellationorder->load_dashboard_partno();
+			return $data;
+		}
+
 		public function load_generate()
 		{
 			$code = $_POST['code'];
@@ -50,6 +56,19 @@ class Cancellationorder
 		public function load_dashboard_by_receiving()
 		{
 			$data = $this->cancellationorder->load_dashboard_by_receiving();
+			return $data;
+		}
+
+		public function load_approver()
+		{
+			$section = $_POST['section'];
+			$data = $this->cancellationorder->load_approver($section);
+			return $data;
+		}
+
+		public function load_incharge()
+		{
+			$data = $this->cancellationorder->load_incharge();
 			return $data;
 		}
 
@@ -80,8 +99,8 @@ class Cancellationorder
 			[
 				'date_rejected'	=>	date('Y-m-d H:i'),
 				'rejected_by'	=>	$_POST['name'],
-				'status'	=>	"REJECTED"
-
+				'status'	=>	"REJECTED",
+				'rejected_reason' => $_POST['reason']
 			];
 			
 			$where = 
@@ -90,6 +109,26 @@ class Cancellationorder
 			];
 			
 			return $this->cancellationorder->rejected_by_purchasing($data, $where, $generate_code);
+		}
+
+		public function rejected_by_pc()
+		{
+			$id = $_POST['id'];
+
+			$data = 
+			[
+				'date_rejected'	=>	date('Y-m-d H:i'),
+				'rejected_by'	=>	$_POST['name'],
+				'status'	=>	"REJECTED",
+				'rejected_reason' => $_POST['reason']
+			];
+			
+			$where = 
+			[
+				'id =' => $id
+			];
+			
+			return $this->cancellationorder->rejected_by_pc($data, $where, $id);
 		}
 
 		public function remove_item()
@@ -138,7 +177,22 @@ class Cancellationorder
 			return $this->cancellationorder->received_pc_incharge($data, $where, $data2,  $where2);
 		}
 
+		public function save_email()
+		{
+			$data = 
+			[
+				'email_by' => $_POST['name'],
+				'email_date' =>	date('Y-m-d H:i')
 
+			];
+			
+			$where = 
+			[
+				'id =' => $_POST['id']
+			];
+			
+			return $this->cancellationorder->save_email($data, $where);
+		}
 	
 }
 
@@ -149,6 +203,11 @@ $data = array();
 if($cancellationorder->action == 'load_dashboard')
 {
 	$data = $cancellationorder->load_dashboard();
+	echo json_encode($data);
+}
+else if($cancellationorder->action == 'load_dashboard_partno')
+{
+	$data = $cancellationorder->load_dashboard_partno();
 	echo json_encode($data);
 }
 else if($cancellationorder->action == 'load_generate')
@@ -184,5 +243,25 @@ else if($cancellationorder->action == 'load_dashboard_by_receiving')
 else if($cancellationorder->action == 'received_pc_incharge')
 {
 	$data = $cancellationorder->received_pc_incharge();
+	echo json_encode($data);
+}
+else if($cancellationorder->action == 'save_email')
+{
+	$data = $cancellationorder->save_email();
+	echo json_encode($data);
+}
+else if($cancellationorder->action == 'rejected_by_pc')
+{
+	$data = $cancellationorder->rejected_by_pc();
+	echo json_encode($data);
+}
+else if($cancellationorder->action == 'load_approver')
+{
+	$data = $cancellationorder->load_approver();
+	echo json_encode($data);
+}
+else if($cancellationorder->action == 'load_incharge')
+{
+	$data = $cancellationorder->load_incharge();
 	echo json_encode($data);
 }

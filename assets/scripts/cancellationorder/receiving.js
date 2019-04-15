@@ -13,6 +13,8 @@ $(document).ready(function ()
 
 	setInterval(function(){ Receiving.realtime(); }, 5000);
 
+	
+
 });
 
 
@@ -78,8 +80,15 @@ var Receiving = (function ()
 				{	
 					var button = "";
 
-					button += "<button type='button' title='View' onclick='Receiving.view_details(" + this.id + ");' class='btn btn-outline-danger btn-sm'><span class='fa fa-eye'></span></button> ";
-
+					button += "<button type='button' title='VIEW' onclick='Receiving.view_details(" + this.id + ");' class='btn btn-outline-danger btn-sm'><span class='fa fa-eye'></span></button> ";
+					// ATTACHMENT
+					if(this.file_upload != null && this.file_upload != '')
+						button += "<a href='../" + this.file_upload + "' target='_blank'> <button type='button' title='DOCUMENT' class='btn btn-outline-danger btn-sm'><span class='fa fa-link'></span></button> </a>";
+					else
+						button += "<button type='button' title='DOCUMENT' class='btn btn-outline-danger btn-sm' disabled><span class='fa fa-link'></span></button> ";
+					// REJECT
+					button += "<button type='button' title='REJECT' onclick='Receiving.show_reject_application(" + this.id + ");' class='btn btn-outline-danger btn-sm'><span class='fa fa-trash'></span></button> ";
+					
 					tr +=
 							"<tr align='center'>" +
 							"<td>" + button + "</td>" +
@@ -262,6 +271,51 @@ var Receiving = (function ()
 				console.log(data);
 			}
 		});
+	};
+
+	this_Receiving.show_reject_application = function(id)
+	{
+		_id = id;
+		$('#txt_reason').val('');
+		$('#reject_modal').modal('show');
+	};
+
+	this_Receiving.reject_application = function()
+	{
+		var reason = $('#txt_reason').val();
+
+		if(reason != '')
+		{
+			if(confirm("Are you sure to continue?"))
+			{
+				$.ajax({
+		  			type: 'POST',
+					url: base_url + 'Cancellationorder.php?action=rejected_by_pc',
+					data: 
+					{
+						id : _id,
+						name : $('#txt_name').val(),
+						reason : reason
+					},
+					dataType: 'json',
+					cache: false,
+					success: function (data)
+					{
+						$('#reject_modal').modal('hide');
+						Receiving.load_dashboard();
+						alertify.success('Successfully Rejected!');
+					},
+					error: function(data) 
+		            {
+		              console.log(data);
+		            }
+		  		});
+			}
+		}
+		else
+		{
+			alertify.error('Please provide detailed reason!');
+		}
 	};
 
 	return this_Receiving;

@@ -26,6 +26,13 @@ $code = $_GET["code"];
   <link rel="stylesheet" href="../vendor/waitme/waitMe.css">
 
   <style>
+
+  		#reject_modal .modal-dialog 
+		{
+	      width:50%;
+	      height:100%;
+	    }
+
 		.fa-signal 
 		{
 			transform: rotate(270deg) scaleX(-1);
@@ -43,7 +50,38 @@ $code = $_GET["code"];
 		{
 			color: #dc3545;
 		}
+
+		.modal-content
+		{
+			border-top-right-radius: 30px;
+	        border-top-left-radius: 30px;
+		}
+
+		.modal-header-danger 
+		{
+	        color:#fff;
+	        padding:9px 15px;
+	        border-bottom:1px solid #eee;
+	        background-color: #d9534f;
+	        -webkit-border-top-left-radius: 5px;
+	        -webkit-border-top-right-radius: 5px;
+	        -moz-border-radius-topleft: 5px;
+	        -moz-border-radius-topright: 5px;
+	        border-top-right-radius: 30px;
+	        border-top-left-radius: 30px;
+	    }
+		.modal-footer-danger 
+		{
+	        background-color: #d9534f;
+	        border-bottom-right-radius: 0px;
+	        border-bottom-left-radius: 0px;
+	    }
+		.design1
+		{
+			border-radius: 15px; border: 1px solid #dc3545; color: #000;
+		}
   </style>
+  
 </head>
 
 <body style="background-color: rgb(202, 215, 219);">
@@ -133,15 +171,16 @@ $code = $_GET["code"];
 			      	<div class="col-sm-12">
 			      		<center>
 			      			<select id="select_head" style="width: 20%; text-align-last: center;">
-			      				<option val=''>CHOOSE</option>
+			      				<!-- <option val=''>CHOOSE</option>
 			      				<option>CRISCELDA FLORES</option>
 			      				<option>MAJALHANIE TORIA</option>
 			      				<option>RUSSEL CAMBAL</option>
-			      				<option>LUNINGNING BAZAR</option>
+			      				<option>LUNINGNING BAZAR</option> -->
 			      			</select>
 			      			<br/><br/>
 			      			<input type="button" id="btn_approve" name="btn_approve" class="btn btn-danger" value="APPROVE" style="background-color: #fff; color: #dc3545;" onclick="Generate.click_approve();" />
-			      			<input type="button" id="btn_reject" name="btn_reject" class="btn btn-danger" value="REJECT" style="background-color: #fff; color: #dc3545;" onclick="Generate.click_reject();" />
+			      			<!-- <input type="button" id="btn_reject" name="btn_reject" class="btn btn-danger" value="REJECT" style="background-color: #fff; color: #dc3545;" onclick="Generate.click_reject();" /> -->
+			      			<input type="button" id="btn_reject" name="btn_reject" class="btn btn-danger" value="REJECT" style="background-color: #fff; color: #dc3545;" onclick="Generate.show_reject();" />
 			      		</center>
 			      	</div>
 			      </div>
@@ -152,7 +191,6 @@ $code = $_GET["code"];
 
 				<input type="hidden" id="" name= "" value="" />
 			</div>
-
 		</div>
 
 		<div class="col-sm-12 col-md-12 col-lg-12" id="div_expired">
@@ -196,6 +234,33 @@ $code = $_GET["code"];
 	</div>
 </div>
 
+  <!-- REJECT -->
+  <div class="modal fade" id="reject_modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        
+        <div class="modal-header modal-header-danger ">
+          <h4 class="modal-title"><span class="fa fa-trash"></span> REASON </h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        
+        <div class="modal-body">
+         
+			<label class="color-red">DETAILED</label><br/>
+			<textarea class="form-control design1" rows="5" id="txt_reason" style="resize: none;" onkeyup="this.value = this.value.toUpperCase();"></textarea>
+
+        </div>
+        
+        <div class="modal-footer">
+        	<button type="button" class="btn btn-danger" onclick="Generate.click_reject();"><span class="fa fa-flag"></span> REJECT APPLICATION</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
 
 <!-- SCRIPT -->
   <script src="../vendor/jquery/jquery.min.js"></script>
@@ -203,18 +268,21 @@ $code = $_GET["code"];
   <script src="../vendor/datatables.net/js/jquery.dataTables.rowsGroup.js"></script>
   <script src="../vendor/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="../vendor/waitme/waitMe.js" ></script>
-
+  <script src="../vendor/bootstrap/bootstrap.min.js"></script>
   <script type="text/javascript">
 
   	$(document).ready(function() {
 
   		Generate.load_generate();
+  		
 
   	});
 
 	var Generate = (function ()
 	{
 		var this_Generate = {};
+
+		var _section = '';
 
 		this_Generate.load_generate = function()
 		{
@@ -249,6 +317,7 @@ $code = $_GET["code"];
 						$('#request_date').val(this.request_date);
 						$('#request_type').val(this.request_type);
 						$('#supplier').val(this.supplier);
+						_section = this.employee_section;
 
 						tr +=
 								"<tr align='center'>" +
@@ -271,6 +340,8 @@ $code = $_GET["code"];
 
 						status = this.status;
 					});
+
+					Generate.load_approver();
 					
 					$("#tblMonitoring tbody").html(tr);
 
@@ -361,7 +432,7 @@ $code = $_GET["code"];
 		this_Generate.click_approve = function()
 		{
 			var head = $('#select_head').val();
-			if(head != 'CHOOSE')
+			if(head != null)
 			{
 				if(confirm("Are you sure to proceed?"))
 		  		{
@@ -395,10 +466,23 @@ $code = $_GET["code"];
 	  			alert('SELECT YOUR NAME!');
 		};
 
+		this_Generate.show_reject = function()
+		{
+			if($('#select_head').val() != null)
+			{
+				$('#txt_reason').val('');
+				$('#reject_modal').modal('show');
+			}
+			else
+	  			alert('SELECT YOUR NAME!');
+		};
+
 		this_Generate.click_reject = function()
 		{
+			var reason = $('#txt_reason').val();
 			var head = $('#select_head').val();
-			if(head != 'CHOOSE')
+
+			if(reason != '')
 			{
 		  		if(confirm("Are you sure to proceed?"))
 		  		{
@@ -410,12 +494,14 @@ $code = $_GET["code"];
 						data: 
 						{
 							code : "<?php echo $code; ?>",
-							name : head
+							name : head,
+							reason : reason
 						},
 						dataType: 'json',
 						cache: false,
 						success: function (data)
 						{
+							$('#reject_modal').modal('hide');
 							$('.loading').waitMe("hide");
 							Generate.load_generate();
 							alert("Successfully Rejected!");
@@ -428,7 +514,9 @@ $code = $_GET["code"];
 		  		}
 		  	}
 		  	else
-	  			alert('SELECT YOUR NAME!');
+			{
+				alert('Please provide detailed reason!');
+			}
 		};
 
 		this_Generate.auto_email = function()
@@ -438,8 +526,6 @@ $code = $_GET["code"];
 				url: '../../assets/email/email_icos_purhead_to_pcstaff.php',
 				data: 
 				{
-					u : "1", // 
-					p : "1", // 
 					control_no : $('#control_no').val()
 				},
 				dataType: 'json',
@@ -454,6 +540,36 @@ $code = $_GET["code"];
 	            }
 	  		});
 		};
+
+		this_Generate.load_approver = function()
+		{
+			$.ajax({
+	  			type: 'POST',
+	  			url: '../../application/controller/Cancellationorder.php?action=load_approver',
+	  			data:
+	  			{
+	  				section : _section
+	  			},
+				dataType: 'json',
+				cache: false,
+				success: function (data)
+				{
+					var option = '<option disabled selected>CHOOSE</option>';
+					$.each(data, function ()
+					{
+						option +=
+						'<option value="' + this.employee_name + '">' + this.employee_name + '</option>';
+					});
+					$('#select_head').html(option);
+				},
+				error: function(data) 
+	            {
+	              console.log(data);
+	            }
+	  		});
+		};
+
+		
 
 		return this_Generate;
 
@@ -470,3 +586,5 @@ $code = $_GET["code"];
 
 </body>
 </html>
+
+

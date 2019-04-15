@@ -34,11 +34,30 @@ class Login_m extends FDTP_Model
 		return $user;
 	}
 
+	public function verify_id($id)
+	{
+		$query = "SELECT * FROM employee_accounts WHERE employee_no = '$id' ";
+		$stmt = $this->conn->prepare($query);
+		$stmt->execute();
+		
+		$user = $stmt->fetchAll();
+		return $user;
+	}
+
 	public function insert_user($data)
 	{
 
 		return $this->db->insert('employee_accounts', $data);
 	}
+
+	public function save_reset_password($data, $where)
+	{
+
+		return $this->db->update('employee_accounts', $data, $where);
+	}
+
+
+
 	
 
 	

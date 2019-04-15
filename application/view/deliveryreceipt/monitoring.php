@@ -12,6 +12,16 @@ require_once '../../config/setup.php';
 require_once APPPATH . 'view/template/header.php';
 ?>
 
+<style type="text/css">
+	
+	.dt-button, .buttons-csv, .buttons-html5
+	{
+		background-color: #fff !important;
+	    border: none !important;
+	}
+
+</style>
+
 <div id="content-wrapper">
 
 	<div class="container-fluid">
@@ -47,11 +57,10 @@ require_once APPPATH . 'view/template/header.php';
 								<thead>
 									<tr align='center'>
 										<th width="20%">Action</th>
-										<th width="15%">Request</th>
-										<th width="15%">Received</th>
+										<th width="20%">Requestor</th>
+										<th width="20%">Attention</th>
 										<th width="20%">Control No.</th>
-										<th width="20%">In-Charge</th>
-										<th width="10%">Status</th>
+										<th width="20%">Status</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -65,12 +74,14 @@ require_once APPPATH . 'view/template/header.php';
 							<table class="table table-bordered" id="tblMonitoringRequest" width="100%" cellspacing="0">
 								<thead>
 									<tr align='center'>
-										<th width="15%">Action</th>
-										<th width="20%">Control No.</th>
+										<th width="10%">Action</th>
+										<th width="15%">Control No.</th>
 										<th width="15%">Part No.</th>
 										<th width="10%">Rev</th>
-										<th width="20%">Supplier</th>
-										<th width="20%">Status</th>
+										<th width="10%">Supplier</th>
+										<th width="10%">DR INV No</th>
+										<th width="20%">Remarks</th>
+										<th width="10%">Status</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -118,17 +129,24 @@ require_once APPPATH . 'view/template/header.php';
 		<!-- ROW 1 -->
 			<div class="col-sm-12 col-md-12 col-lg-12">
 				<div class="table-responsive">
+
+					<h4><span class="badge badge-success">ATTENTION</span></h4>
+					<input type="text" id="txtAttention" class="form-control" style="border-radius: 20px;" readonly>
+
 					<br/>
 					<h4><span class="badge badge-success">DETAILS </span></h4>
 					<table class="table table-bordered" id="tblActualReceiving" width="100%" cellspacing="0">
 						<thead>
 							<tr align='center'>
-								<th width="15%">Part No</th>
-								<th width="15%">Rev</th>
-								<th width="15%">Qty</th>
-								<th width="15%">Actual</th>
-								<th width="20%">Received By</th>
-								<th width="20%">Received Date</th>
+								<th>Part No</th>
+								<th>Rev</th>
+								<th>Qty</th>
+								<th>Actual</th>
+								<th>Supplier</th>
+								<th>DR INV No</th>
+								<th>Remarks</th>
+								<th>Received By</th>
+								<th>Received Date</th>
 							</tr>
 						</thead>
 						<tbody>

@@ -27,7 +27,7 @@ class Cancellationorder_m extends FDTP_Model
 	// SELECT
 		public function load_dashboard()
 		{
-			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status
+			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status, a.file_upload
 				FROM tbl_request_slip a
 				INNER JOIN employee_accounts b ON (CAST(a.incharge AS integer) = b.id)
 				ORDER BY a.id DESC; ";
@@ -37,10 +37,24 @@ class Cancellationorder_m extends FDTP_Model
 			return $data;
 		}
 
+		public function load_dashboard_partno()
+		{
+			$query = "SELECT a.id, c.part_no, c.rev, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.status, a.file_upload
+				FROM tbl_request_slip a
+				INNER JOIN employee_accounts b ON (CAST(a.incharge AS integer) = b.id)
+				INNER JOIN tbl_request_details c ON (a.id = c.tbl_request_slip_id)
+				ORDER BY a.id; ";
+			$stmt = $this->conn->prepare($query);
+			$stmt->execute();
+			$data = $stmt->fetchAll();
+			return $data;
+		}
+
 		public function load_generate($code)
 		{
 			$query = "SELECT a.id as id, a.control_no, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status, a.status,
-			b.part_no, b.rev, b.quantity, b.po_no, b.po_code, b.receipt_no, b.prod_code_no, b.delivery_date, b.supplier_answer, b.reason, b.id as id2
+			b.part_no, b.rev, b.quantity, b.po_no, b.po_code, b.receipt_no, b.prod_code_no, b.delivery_date, b.supplier_answer, b.reason, b.id as id2,
+			c.employee_section
 			FROM tbl_request_slip a
 			INNER JOIN tbl_request_details b ON (a.id = b.tbl_request_slip_id)
 			INNER JOIN employee_accounts c ON (CAST(a.incharge AS integer) = c.id)
@@ -57,7 +71,7 @@ class Cancellationorder_m extends FDTP_Model
 
 		public function load_generate_by_id($id)
 		{
-			$query = "SELECT a.id, a.control_no, c.employee_email, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status as a_status, a.date_approved_by_purchasing, a.date_received_by, a.rejected_by, a.date_rejected,
+			$query = "SELECT a.id, a.control_no, c.employee_email, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status as a_status, a.date_approved_by_purchasing, a.date_received_by, a.rejected_by, a.date_rejected, a.email_by, a.email_date, a.rejected_reason,
 			b.part_no, b.rev, b.quantity, b.po_no, b.po_code, b.receipt_no, b.prod_code_no, b.delivery_date, b.supplier_answer, b.reason, b.status
 			FROM tbl_request_slip a
 			INNER JOIN tbl_request_details b ON (a.id = b.tbl_request_slip_id)
@@ -72,11 +86,32 @@ class Cancellationorder_m extends FDTP_Model
 
 		public function load_dashboard_by_receiving()
 		{
-			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status
+			$query = "SELECT a.id, a.control_no, b.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status, a.file_upload
 				FROM tbl_request_slip a
 				INNER JOIN employee_accounts b ON (CAST(a.incharge AS integer) = b.id)
 				WHERE a.status = 'FOR RECEIVING - PC'
 				ORDER BY a.id DESC; ";
+			$stmt = $this->conn->prepare($query);
+			$stmt->execute();
+			$data = $stmt->fetchAll();
+			return $data;
+		}
+
+		public function load_approver($section)
+		{
+			if($section == 'purchasing')
+				$query = "SELECT * FROM employee_accounts WHERE employee_status = 'active' AND employee_position != 'staff' AND employee_section = '$section' AND employee_group = 'DELIVERY' ";
+			else
+				$query = "SELECT * FROM employee_accounts WHERE employee_status = 'active' AND employee_position != 'staff' AND employee_section = '$section' ";
+			$stmt = $this->conn->prepare($query);
+			$stmt->execute();
+			$data = $stmt->fetchAll();
+			return $data;
+		}
+
+		public function load_incharge()
+		{
+			$query = "SELECT * FROM employee_accounts WHERE employee_status = 'active' AND employee_section = 'pc' AND employee_group = 'INCHARGE' ORDER BY id ";
 			$stmt = $this->conn->prepare($query);
 			$stmt->execute();
 			$data = $stmt->fetchAll();
@@ -116,6 +151,32 @@ class Cancellationorder_m extends FDTP_Model
 			}
 		}
 
+		public function rejected_by_pc($data, $where, $id)
+		{
+			try
+			{
+				$this->conn->beginTransaction();
+
+				$update_slip = $this->db->update('tbl_request_slip', $data, $where);
+
+				$query = "
+					UPDATE tbl_request_details
+					SET status = 'REMOVED'
+					FROM tbl_request_slip
+					WHERE 
+					tbl_request_details.tbl_request_slip_id =  tbl_request_slip.id
+					AND tbl_request_slip.id = ?; ";
+				$stmt = $this->conn->prepare($query);
+				$update_details = $stmt->execute([$id]);
+
+				return $this->conn->commit();
+			}
+			catch (Exception $e) 
+			{
+				return $this->conn->rollback();
+			}
+		}
+
 		public function remove_item($data, $where)
 		{
 
@@ -137,6 +198,12 @@ class Cancellationorder_m extends FDTP_Model
 			{
 				return $this->conn->rollback();
 			}
+		}
+
+		public function save_email($data, $where)
+		{
+
+			return $this->db->update('tbl_request_slip', $data, $where);
 		}
 
 }

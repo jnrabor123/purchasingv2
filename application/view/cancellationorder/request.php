@@ -94,8 +94,11 @@ require_once APPPATH . 'view/template/header.php';
 												<h4><span class="badge badge-danger">DATE </span></h4>
 												<input type="text" class="form-control" style="border-radius: 50px; text-align: center;" id="txtRequestDate" name="txtRequestDate" readonly>
 
-												<h4><span class="badge badge-danger">IN-CHARGE </span></h4>
-												<input type="text" class="form-control" style="border-radius: 50px; text-align: center;" id="" name="" value="<?php echo $_SESSION['name']; ?>" readonly>
+												<!-- <h4><span class="badge badge-danger">IN-CHARGE </span></h4>
+												<input type="text" class="form-control" style="border-radius: 50px; text-align: center;" id="" name="" value="<?php echo $_SESSION['name']; ?>" readonly> -->
+
+												<h4><span class="badge badge-danger">DOCUMENT </span></h4>
+												<input type="file" class="form-control" style="border-radius: 50px; text-align: center;" id="txtAttachment" name="txtAttachment">
 											</div>
 
 											<div class="col-sm-4 col-md-4 col-lg-4">
@@ -179,8 +182,11 @@ require_once APPPATH . 'view/template/header.php';
 							</div>
 
 							<div class="card-body loading_upload">
-								<h4><span class="badge badge-danger">ATTACHMENT</span></h4>
-								<input type="file" class="form-control" id="file_upload" name="file_upload">
+								<h4><span class="badge badge-danger">FORM</span></h4>
+								<input type="file" class="form-control" style="border-radius: 50px; text-align: center;" id="file_upload" name="file_upload">
+
+								<h4><span class="badge badge-danger">DOCUMENT </span></h4>
+								<input type="file" class="form-control" style="border-radius: 50px; text-align: center;" id="txtAttachment_upload" name="txtAttachment_upload">
 
 								<br/><br/>
 

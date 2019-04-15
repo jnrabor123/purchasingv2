@@ -61,6 +61,12 @@ require_once APPPATH . 'view/template/header.php';
 	{
 		color: #dc3545;
 	}
+
+	.design1
+	{
+		border-radius: 15px; border: 1px solid #dc3545; color: #000; width: 100%;
+	}
+
 </style>
 
 
@@ -146,7 +152,7 @@ require_once APPPATH . 'view/template/header.php';
 </html>
 
 
-  <!-- The Modal -->
+  <!-- VIEW -->
   <div class="modal fade" id="view_modal">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -226,6 +232,36 @@ require_once APPPATH . 'view/template/header.php';
           	<input type="hidden" id="txt_id" />
           	<input type="hidden" id="txt_name" value="<?php echo $_SESSION['name'] ?>" />
           	<input type="hidden" id="txt_requestor">
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- REJECT -->
+  <div class="modal fade" id="reject_modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        
+        <div class="modal-header modal-header-danger ">
+          <h4 class="modal-title"><span class="fa fa-trash"></span> REASON </h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        
+        <div class="modal-body">
+         
+        	<div class="container">
+
+      			<label class="color-red">DETAILED</label><br/>
+      			<textarea class="design1" rows="5" id="txt_reason" style="resize: none;" onkeyup="this.value = this.value.toUpperCase();"></textarea>
+        	</div>
+
+        </div>
+        
+        <div class="modal-footer">
+        	<button type="button" class="btn btn-outline-danger" onclick="Receiving.reject_application();"><span class="fas fa-flag"></span> REJECT APPLICATION</button>
         </div>
         
       </div>

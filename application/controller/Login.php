@@ -31,6 +31,13 @@ class Login
 		$result = $this->login->login($username, $password);
 		return $result;
 	}
+
+	public function verify_id()
+	{
+		$id = $_POST['id'];
+		$result = $this->login->verify_id($id);
+		return $result;
+	}
 	
 	// NOTE: table column  => S_POST[""] 
 
@@ -48,6 +55,21 @@ class Login
 			'employee_picture'	=> '../images/user.jpg'
 		]; 
 		return $this->login->insert_user($data);
+	}
+
+	public function save_reset_password()
+	{
+		$data = 
+		[
+			'employee_password'	=>	$_POST['password']
+		];
+		
+		$where = 
+		[
+			'id =' => $_POST['id']
+		];
+		
+		return $this->login->save_reset_password($data, $where);
 	}
 	
 }
@@ -75,6 +97,16 @@ else if($login->action == 'insert_user')
 {
 
 	echo $data = $login->insert_user();
+}
+else if($login->action == 'verify_id')
+{
+	$data = $login->verify_id();
+	echo json_encode($data);
+}
+else if($login->action == 'save_reset_password')
+{
+	$data = $login->save_reset_password();
+	echo json_encode($data);
 }
 
 

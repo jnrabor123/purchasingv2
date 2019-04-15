@@ -21,6 +21,7 @@ var Login = (function ()
 
 	//PUBLIC OBJECT TO BE RETURNED
 	var this_Login = {};
+	var _reset = [];
 
 	this_Login.loginCheck = function ()
 	{
@@ -182,8 +183,93 @@ var Login = (function ()
 		}
 	};
 
+	this_Login.reset_password = function()
+	{
+		$('#modalForgot').iziModal('destroy');
+		$("#modalForgot").iziModal({
+			subtitle: 'Reset',
+			width: 1500,
+			padding: 10,
+			overlay: true,
+			top: 70
+		});
+		$("#modalForgot").iziModal('open');
 
+		$('#txt_id').attr('readonly', false);
+		$('#txt_password').attr('readonly', true);
+		$('#txt_repassword').attr('readonly', true);
+		$('#btn_reset').hide();
+	};
 
+	this_Login.verify_id = function()
+	{
+
+		$.ajax({
+				type: 'POST',
+				url: 'application/controller/Login.php?action=verify_id',
+				data:
+				{
+					id : $('#txt_id').val()
+				},
+				dataType: 'json',
+				cache: false,
+				success: function(data)
+				{
+					if(data.length > 0)
+					{
+						alertify.success('Verified!');
+						$('#txt_id').attr('readonly', true);
+						$('#txt_password').attr('readonly', false);
+						$('#txt_repassword').attr('readonly', false);
+						_reset = data;
+						$('#btn_reset').show();
+					}
+					else
+						alertify.error('No existing account! Contact Admin');
+				},
+				error: function(data) 
+	            {
+	              console.log(data);
+	              alertify.error('Please enter number!');
+	            }
+
+			});
+	};
+
+	this_Login.reset_now = function()
+	{
+		var pass = $('#txt_password').val();
+		var repass = $('#txt_repassword').val();
+
+		if(pass == repass && (pass != '' && repass != ''))
+		{
+			$.ajax({
+				type: 'POST',
+				url: 'application/controller/Login.php?action=save_reset_password',
+				data:
+				{
+					id : _reset[0]["id"],
+					password : pass
+				},
+				dataType: 'json',
+				cache: false,
+				success: function(data)
+				{
+					alertify.success('Successfully Changed!');
+					$('#modalForgot').iziModal('destroy');
+					$("#modalForgot").iziModal('hide');
+				},
+				error: function(data) 
+	            {
+	              console.log(data);
+	              alertify.error('Please enter number!');
+	            }
+
+			});
+		}
+		else
+			alertify.error('Please check the password!');
+	};
 
 	return this_Login;
 

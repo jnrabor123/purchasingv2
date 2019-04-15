@@ -1,10 +1,16 @@
 <?php
 
 	require 'email_header.php';
-	
-	$u = $_POST['u'];
-	$p = $_POST['u'];
+
 	$control_no = $_POST['control_no'];
+
+	// EMAIL
+		$sql = "SELECT employee_email, employee_position FROM employee_accounts WHERE employee_section = 'pc' AND employee_group = 'INCHARGE'; ";
+		$result = pg_query($connection, $sql); 
+		while($row = pg_fetch_array($result))
+		{
+			$mail->AddAddress($row[0]);
+		}
 
 	$data = array();
 	
@@ -31,10 +37,10 @@
 			';
 
 	$htmlBodyText .= 
-	'		
+	'
 			<br/><br/>
 			
-			<a href="http://10.164.30.173/purchasingv2/assets/auto_login/magic.php?u:=' . $u . '&p:=' . $p . '" target="_blank" style="font-style: italic; color: #dd4b39; font-family: Courier New; pointer-events: none; cursor: default;">Come and visit us! Just click here</a>
+			<a href="http://10.164.30.173/purchasingv2/assets/auto_login/magic.php" target="_blank" style="font-style: italic; color: #dd4b39; font-family: Courier New; pointer-events: none; cursor: default;">Come and visit us! Just click here</a>
 			
 			<br/><br/><br/><br/><br/>
 			

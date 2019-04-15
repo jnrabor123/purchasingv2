@@ -58,6 +58,12 @@
         <!-- Wait Me JS -->
         <link href="<?php echo base_url; ?>assets/vendor/waitme/waitMe.css" rel="stylesheet">
 
+        <!-- BUTTON DATATABLES -->
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.dataTables.min.css">
+
+
+
+
 
     </head>
 
@@ -175,6 +181,7 @@
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/request.php">Request</a>
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/receiving.php">Receiving</a>
                         <a class="dropdown-item" href="<?php echo base_url ?>application/view/cancellationorder/reports.php">Reports</a>
+                        <a class="dropdown-item" href="<?php echo base_url ?>assets/docs/ICOS/Flowchart.xlsx">Docs</a>
                     </div>
                 </li>
                 <li class="nav-item ">

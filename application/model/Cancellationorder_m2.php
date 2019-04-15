@@ -14,6 +14,33 @@ if($action == "insert_manual")
 		{
 			pg_query("BEGIN");
 
+			// ATTACHMENT
+				$location = '';
+
+				if(isset($_FILES['txtAttachment']['name'])) 
+				{
+					if($_FILES['txtAttachment']['name'] == "") { $location = ""; }
+					else 
+					{
+						$location = "../../upload/ICOS/" . basename($_FILES['txtAttachment']['name']); 
+
+						if(file_exists($location))
+						{
+							$newName = $location;
+							$counter = 1;
+							while(file_exists($newName))
+							{
+								$temp = explode(".", $_FILES['txtAttachment']['name']);
+								$newName = "../../upload/ICOS/" . $temp[0] . $counter . "." . $temp[1];
+								$counter++;
+							}
+							move_uploaded_file($_FILES['txtAttachment']['tmp_name'] , $newName);
+							$location = $newName;
+						}
+						else { move_uploaded_file($_FILES['txtAttachment']['tmp_name'] , $location); }
+					}
+				}
+
 			// CONTROL NO
 				$sqlselect = "SELECT control_no FROM tbl_request_slip ORDER BY id DESC LIMIT 1 ";
 				$queryselect = pg_query($connection, $sqlselect);
@@ -47,7 +74,7 @@ if($action == "insert_manual")
 				$section = $_POST['session_section'];
 				$status = 'FOR APPROVAL - ' . $section;
 
-				$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status') RETURNING id; ";
+				$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status, file_upload) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status', '$location') RETURNING id; ";
 				$result = pg_query($connection, $tbl_request_slip); 
 
 				$row = pg_fetch_row($result);
@@ -112,6 +139,7 @@ else if($action == "upload")
 {
 	if(isset($_FILES['filesssss']['name'])) 
 	{
+
 		$tmpfname = $_FILES['filesssss']['tmp_name'];
 	    $excelReader = PHPExcel_IOFactory::createReaderForFile($tmpfname);
 	    $excelObj = $excelReader->load($tmpfname);
@@ -124,6 +152,33 @@ else if($action == "upload")
         	try 
 			{
 				pg_query("BEGIN");
+
+				// ATTACHMENT
+					$location = '';
+
+					if(isset($_FILES['txtAttachment']['name'])) 
+					{
+						if($_FILES['txtAttachment']['name'] == "") { $location = ""; }
+						else 
+						{
+							$location = "../../upload/ICOS/" . basename($_FILES['txtAttachment']['name']); 
+
+							if(file_exists($location))
+							{
+								$newName = $location;
+								$counter = 1;
+								while(file_exists($newName))
+								{
+									$temp = explode(".", $_FILES['txtAttachment']['name']);
+									$newName = "../../upload/ICOS/" . $temp[0] . $counter . "." . $temp[1];
+									$counter++;
+								}
+								move_uploaded_file($_FILES['txtAttachment']['tmp_name'] , $newName);
+								$location = $newName;
+							}
+							else { move_uploaded_file($_FILES['txtAttachment']['tmp_name'] , $location); }
+						}
+					}
 
 				// CONTROL NO
 					$sqlselect = "SELECT control_no FROM tbl_request_slip ORDER BY id DESC LIMIT 1 ";
@@ -160,7 +215,7 @@ else if($action == "upload")
 					$section = $_POST['session_section'];
 					$status = 'FOR APPROVAL - ' . $section;
 
-					$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status') RETURNING id; ";
+					$tbl_request_slip = "INSERT INTO tbl_request_slip(supplier, request_date, request_type, incharge, status, file_upload) VALUES('$supplier', '$request_date', '$request_type', '$incharge', '$status', '$location') RETURNING id; ";
 					$insert_check = pg_query($connection, $tbl_request_slip); 
 
 					if(!$insert_check)

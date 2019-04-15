@@ -2,9 +2,6 @@
   
 include("../../application/model/connection.php");
 
-$u = $_GET["u:"];
-$p = $_GET["p:"];
-
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +58,26 @@ $p = $_GET["p:"];
 			</center>
 		</div>
 
+		<div class="col-lg-4 col-md-4 col-sm-4">
+		</div>
+
+		<div class="col-lg-4 col-md-4 col-sm-4">
+			<center>
+				<h1>SELECT TO LOGIN</h1>
+				<br/><br/>
+				<img src="../logo/ICOS/cose.jpg" style="height: 150px; width: 150px; border-radius: 50%;" />  
+				<br/>
+				<button type="button" class="btn btn-danger" style="font-size: 20px;" onclick="Magic.auto_login(0);">ROSEL</button>
+				<br/><br/>
+				<img src="../logo/ICOS/bianca.jpg" style="height: 150px; width: 150px; border-radius: 50%;" /> 
+				<br/>
+				<button type="button" class="btn btn-danger" style="font-size: 20px;" onclick="Magic.auto_login(1);">BIANCA</button>
+			</center>
+		</div>
+
+		<div class="col-lg-4 col-md-4 col-sm-4">
+		</div>
+
 	</div>
 </div>
 
@@ -77,19 +94,18 @@ $p = $_GET["p:"];
 
   	$(document).ready(function() {
 
-  		Magic.flip_clock();
-
+  		// Magic.flip_clock();
+  		Magic.load_incharge();
   	});
 
 	var Magic = (function ()
 	{
 		var this_Magic = {};
 		var clock;
+		var _approver = [];
 
-		this_Magic.auto_login = function()
+		this_Magic.auto_login = function(index)
 		{
-			var u = "<?php echo $u; ?>";
-			var p = "<?php echo $p; ?>";
 
 			$.ajax({
 
@@ -97,8 +113,8 @@ $p = $_GET["p:"];
 				url: '../../application/controller/' + 'Login.php?action=login',
 				data:
 				{
-					username : u,
-					password : p
+					username : _approver[index][0],
+					password : _approver[index][1]
 				},
 				dataType: 'json',
 				cache: false,
@@ -180,6 +196,33 @@ $p = $_GET["p:"];
 
 			// callback
 			onClose: function() {}
+
+			});
+		};
+
+		this_Magic.load_incharge = function()
+		{
+			$.ajax({
+
+				type: 'POST',
+				url: '../../application/controller/Cancellationorder.php?action=load_incharge',
+				dataType: 'json',
+				cache: false,
+				success: function(data)
+				{
+
+					$.each(data, function ()
+					{
+						var temp = [];
+						temp.push(this.employee_no);
+						temp.push(this.employee_password);
+						_approver.push(temp);
+					});
+				},
+				error: function(data) 
+	            {
+	              console.log(data);
+	            }
 
 			});
 		};

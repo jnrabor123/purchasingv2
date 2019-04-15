@@ -34,10 +34,11 @@ require_once APPPATH . 'view/template/header.php';
 							<table class="table table-bordered" id="tblReceiving" width="100%" cellspacing="0">
 								<thead>
 									<tr align='center'>
-										<th width="25%">Action</th>
-										<th width="25%">Date</th>
-										<th width="25%">Control No.</th>
-										<th width="25%">Status</th>
+										<th>Action</th>
+										<th>Attention</th>
+										<th>Request</th>
+										<th>Control No.</th>
+										<th>Status</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -90,12 +91,15 @@ require_once APPPATH . 'view/template/header.php';
 						<table class="table table-bordered" id="tblActualReceiving" width="100%" cellspacing="0">
 							<thead>
 								<tr align='center'>
-									<th width="10%">#</th>
-									<th width="20%">Part No</th>
-									<th width="20%">Rev</th>
-									<th width="20%">Qty</th>
-									<th width="20%">Actual</th>
-									<th width="10%">Action</th>
+									<th>#</th>
+									<th>Part No</th>
+									<th>Rev</th>
+									<th>Qty</th>
+									<th>Actual</th>
+									<th>Supplier</th>
+									<th>DR INV No</th>
+									<th>Remarks</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>

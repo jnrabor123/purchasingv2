@@ -14,6 +14,12 @@ require_once APPPATH . 'view/template/header.php';
 
 <style type="text/css">
 
+	.dt-button, .buttons-csv, .buttons-html5
+	{
+		background-color: #fff !important;
+	    border: none !important;
+	}
+
 	th, table.table-bordered.dataTable tbody td
 	{
 
@@ -57,13 +63,15 @@ require_once APPPATH . 'view/template/header.php';
 	{
 		border-radius: 15px; border: 1px solid #dc3545; color: #000; text-align: center; width: 90%;
 	}
+	.design1
+	{
+		border-radius: 15px; border: 1px solid #dc3545; color: #000; width: 100%;
+	}
 	.color-red
 	{
 		color: #dc3545;
 	}
 </style>
-
-
 
 <div id="content-wrapper">
 
@@ -90,6 +98,8 @@ require_once APPPATH . 'view/template/header.php';
 						  <div class="btn-group" role="group">
 						    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="btnChoose">CHOOSE</span> </button>
 						    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+						    	<label class="dropdown-item" onclick="Dashboard.controlno();">CONTROL NUMBER </label>
+						      	<label class="dropdown-item" onclick="Dashboard.partno();">PART NUMBER </label>
 						    </div>
 						  </div>
 						</div>
@@ -114,6 +124,25 @@ require_once APPPATH . 'view/template/header.php';
 										<th>PC Incharge</th>
 									</tr>
 								</thead>
+							</table>
+						</div>
+
+						<div class="table-responsive" id="divMonitoringRequest">
+							<br/>
+							<table class="table table-bordered" id="tblMonitoringRequest" width="100%" cellspacing="0">
+								<thead>
+									<tr align='center'>
+										<th width="%">Action</th>
+										<th width="%">Part No.</th>
+										<th width="%">Rev</th>
+										<th width="%">Control No.</th>
+										<th width="%">Supplier</th>
+										<th width="%">Status</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
 							</table>
 						</div>
 
@@ -184,7 +213,10 @@ require_once APPPATH . 'view/template/header.php';
 			      		<div class="col-sm-4 col-md-4 col-lg-4">
 			      			<br/>
 			      			<label class="color-red">SUPPLIER</label><br/>
-			      			<textarea class="design" rows="5" id="supplier" style="resize: none;" readonly></textarea>
+			      			<input class="design" type="text" id="supplier" readonly /><br/>
+			      			<!-- <textarea class="design" rows="5" id="supplier" style="resize: none;" readonly></textarea> -->
+			      			<label class="color-red">EMAIL SECTION</label><br/>
+			      			<textarea class="design" rows="3" id="email_by" style="resize: none;" readonly></textarea>
 			      		</div>
 
 			      	<div class="col-sm-12 col-md-12 col-lg-12">
@@ -234,6 +266,17 @@ require_once APPPATH . 'view/template/header.php';
 						<input class="design" type="text" id="txt_rejected_date" readonly /><br/>
 					</div>
 
+					<div class="col-sm-8 col-md-8 col-lg-8">
+						<label class="color-red">REASON</label><br/>
+						<textarea class="design1" rows="3" id="txt_reason" style="resize: none;" readonly></textarea>					
+					</div>
+					<div class="col-sm-4 col-md-4 col-lg-4">
+						<label class="color-red">SENT BY</label><br/>
+						<textarea class="design" rows="3" id="txt_sent_by" style="resize: none;" readonly></textarea>
+					</div>
+
+
+
 
         		</div>
 
@@ -243,9 +286,9 @@ require_once APPPATH . 'view/template/header.php';
         
         
         <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-outline-danger" id="btn_received_encoded" onclick="Dashboard.finish_encode();">RECEIVED & ENCODED</button>
+          <button type="button" class="btn btn-outline-danger" id="btn_email" onclick="Dashboard.email();"><span class="fa fa-paper-plane"></span> SENT</button>
           <input type="hidden" id="txt_id" />
-          <input type="hidden" id="txt_name" value="<?php echo $_SESSION['name'] ?>" /> -->
+          <input type="hidden" id="txt_name" value="<?php echo $_SESSION['name'] ?>" /> 
         </div>
         
       </div>

@@ -128,7 +128,6 @@
         <script src="assets/vendor/sketchmaster/sketch.js"></script>
         <script src="assets/vendor/sketchmaster/sketchjs.js"></script>
         <script src="assets/vendor/sketchmaster/loginplugins/jquery-2.2.3.min.js"></script>
-        <!-- <link rel="stylesheet" href="assets/vendor/sketchmaster/loginplugins/bootstrap.min.js"> -->
         <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="assets/vendor/alertifyjs/alertify.js" ></script>
         <script src="assets/vendor/alertifyjs/alertify.min.js" ></script>
@@ -145,14 +144,6 @@
     <form method="post" enctype="multipart/form-data" autocomplete="off">
     <div class="row">
 
-        <div class="col-md-12">
-            
-            <center>
-                <!-- <img src="assets/logo/login.png" height="150px" width="150px"> -->
-            </center>
-
-        </div>
-
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <br/>
@@ -168,6 +159,7 @@
             <center>
                 <br/>
                 <button type="button" class="btn btn-outline-info" onclick='Login.loginCheck()'>PROCEED</button>
+                <button type="button" class="btn btn-outline-info" onclick='Login.reset_password()'>RESET PASSWORD <span class="fa fa-arrow-right"></span></button>
             </center>
         </div>
 
@@ -241,61 +233,51 @@
 </div>
 
 <!-- FORGOT PASSWORD -->
-<div id="modalForgot" data-iziModal-title="User Management" data-iziModal-icon="fas fa-user-circle" >
+<div id="modalForgot" data-iziModal-title="Forgot Password" data-iziModal-icon="fas fa-user-circle" >
     <form method="post" id="modalFormForgot" enctype="multipart/form-data" autocomplete="off">
     <div class="row">
 
-        <div class="col-md-6">
+        <!-- ID -->
+        <div class="col-md-1"></div>
+        <div class="col-md-8">
             <label for="">ID Number</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control center-align" id="txt_id" onkeyup="this.value = this.value.toUpperCase()">
         </div>
 
-        <div class="col-md-6">
-            <label for="">Fullname</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
+        <div class="col-md-3">
+            <label for="">&nbsp;</label><br/>
+            <button type="button" class="btn btn-outline-info" onclick='Login.verify_id()'>VERIFY</button>
             <br/>
         </div>
 
-        <div class="col-md-6">
+        <!-- PASSWORD -->
+        <div class="col-md-1"></div>
+        <div class="col-md-8">
             <label for="">Password</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
-        </div>
-        
-        <div class="col-md-6">
-            <label for="">Section</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
-            <br/>
+            <input type="password" class="form-control center-align" id="txt_password">
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-3">
+            <label for="">&nbsp;</label><br/>
+            <br/>
+        </div>  
+
+        <!-- RETYPE -->
+        <div class="col-md-1"></div>
+        <div class="col-md-8">
             <label for="">Re-type Password</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
+            <input type="password" class="form-control center-align" id="txt_repassword">
         </div>
-        
-        <div class="col-md-6">
-            <label for="">Position</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
+
+        <div class="col-md-3">
+            <label for="">&nbsp;</label><br/>
             <br/>
         </div>
 
         <div class="col-md-12">
-            <label for="">Email</label>
-            <input type="text" class="form-control center-align" id="" onkeyup="this.value = this.value.toUpperCase()">
-        </div>
-
-        <div class="col-md-6">
             <br/>
             <center>
-                <button type="button" class="btn btn-success btn-lg" onclick='Login.registerRegistration();'>
-                    <i class="fas fa-plus-circle"></i> Register
-                </button>
-            </center>
-        </div>
-        <div class="col-md-6">
-            <br/>
-            <center>
-                <button type="button" class="btn btn-danger btn-lg" onclick='Login.registerClear();'>
-                    <i class="fas fa-eraser"></i> Clear
+                <button type="button" class="btn btn-danger btn-lg" id="btn_reset" onclick='Login.reset_now();'><i class="fas fa-paper-plane"></i> Reset
                 </button>
             </center>
         </div>

@@ -113,6 +113,7 @@ var DeliveryReceipt  = (function ()
 								"<button class='btn btn-info btn-sm' onclick='DeliveryReceipt.receive(" + this.id + ");' data-toggle='tooltip' title='View'><i class='fas fa-edit'></i></button> " +
 								"<button class='btn btn-danger btn-sm' onclick='DeliveryReceipt.return(" + this.id + ");' data-toggle='tooltip' title='Return'><i class='fas fa-undo-alt'></i></button> " +
 							"</td>" +
+							"<td>" + this.employee_name + "</td>" +
 							"<td>" + this.request_date + "</td>" +
 							"<td>" + this.control_no + "</td>" +
 							"<td>" + this.status + "</td>" +
@@ -123,9 +124,9 @@ var DeliveryReceipt  = (function ()
 				$('#tblReceiving').DataTable();
 
 			},
-			error: function(jqXHR, errorStatus, errorThrown) 
+			error: function(error) 
             {
-              console.log(errorStatus, errorThrown);
+              console.log(error);
             }
 		});
 	};
@@ -203,12 +204,13 @@ var DeliveryReceipt  = (function ()
 				$('#tblActualReceiving').DataTable().destroy();
 
 				var tr = "";
+				var x = 1;
 				$.each(data, function ()
 				{
 					tr +=
 						"<tr align='center'>" +
-						"<td>" +
-							"<input type='text' class='form-control' style='text-align: center; width: 50%;' id='txtId' name='txtId[]' value='" + this.id + "' readonly />" +
+						"<td>" + (x++) +
+							"<input type='hidden' class='form-control' style='text-align: center; width: 50%;' id='txtId' name='txtId[]' value='" + this.id + "' readonly />" +
 						"</td>" + 
 						"<td>" + this.part_no + "</td>" + 
 						"<td>" + this.rev + "</td>" + 
@@ -218,6 +220,9 @@ var DeliveryReceipt  = (function ()
 						"<td>" +
 							"<input type='number' class='form-control' style='text-align: center; width: 50%;' id='txtActual' name='txtActual[]' value='" + this.qty + "' />" +
 						"</td>" +
+						"<td>" + this.supplier + "</td>" + 
+						"<td>" + this.dr_inv_no + "</td>" + 
+						"<td>" + this.remarks + "</td>" + 
 						"<td>" +
 						"<button class='btn btn-danger btn-sm' id='" + this.id + "' onclick='DeliveryReceipt.removeitem(" + this.id + ");' data-toggle='tooltip' title='Remove'><i class='fas fa-trash-alt'></i></button> " +
 						"</td>" +

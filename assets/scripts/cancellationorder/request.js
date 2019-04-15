@@ -195,6 +195,8 @@ var Cancellationorder = (function ()
 			 dataForm.append('session_id', $('#session_id').val());
 			 dataForm.append('generate_code', Cancellationorder.generate_code());
 			 dataForm.append('session_section', $('#session_section').val());
+			 dataForm.append('txtAttachment', $("#txtAttachment_upload").prop('files')[0]);
+			 
 
 			 Cancellationorder.run_waitMe("loading_upload");
 
@@ -216,6 +218,7 @@ var Cancellationorder = (function ()
 						Cancellationorder.auto_email(result[1], result[2]);
 
 						$("#file_upload").val('');
+						$("#txtAttachment_upload").val('');
 						$('#txtRequestSupplier_upload').val('');
 						$('#txtRequestType_upload').val('CHOOSE');
 					},

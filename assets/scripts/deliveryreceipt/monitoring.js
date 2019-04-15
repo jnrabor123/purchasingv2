@@ -137,13 +137,18 @@ var DeliveryReceipt = (function ()
 						button += "<button class='btn btn-warning btn-sm text-white' onclick='DeliveryReceipt.cancel_view(" + this.id + ");' data-toggle='tooltip' title='CANCEL'><i class='fas fa-bell-slash'></i></button>";
 					}
 
+					var request_date = '';
+					var received_date = '';
+
+					(this.request_date == null) ? request_date = '' : request_date = this.request_date;
+					(this.received_date == null) ? received_date = '' : received_date = this.received_date;
+
 					tr +=
 							"<tr align='center'>" +
 							"<td>" + button + "</td>" +
-							"<td>" + this.request_date + "</td>" +
-							"<td>" + this.received_date + "</td>" +
+							"<td>" + this.employee_no + "<br/>" + request_date + "</td>" +
+							"<td>" + this.employee_name + "<br/>" + received_date + "</td>" +
 							"<td>" + this.control_no + "</td>" +
-							"<td>" + this.employee_no + "</td>" +
 							"<td>" + this.status + "</td>" +
 							"</tr>";
 				});
@@ -172,6 +177,7 @@ var DeliveryReceipt = (function ()
 				$('#tblMonitoringRequest').DataTable().destroy();
 
 				var tr = "";
+				var final = [];
 
 				$.each(data, function ()
 				{
@@ -201,18 +207,54 @@ var DeliveryReceipt = (function ()
 						button += "<button class='btn btn-warning btn-sm text-white' onclick='DeliveryReceipt.cancel_view(" + this.id + ");' data-toggle='tooltip' title='CANCEL'><i class='fas fa-bell-slash'></i></button>";
 					}
 
-					tr +=
-							"<tr align='center'>" +
-							"<td>" + button + "</td>" +
-							"<td>" + this.control_no + "</td>" +
-							"<td>" + this.part_no + "</td>" +
-							"<td>" + this.rev + "</td>" +
-							"<td>" + this.supplier + "</td>" +
-							"<td>" + this.status + "</td>" +
-							"</tr>";
+					var temp = [];
+
+					temp.push(button);
+					temp.push(this.control_no);
+					temp.push(this.part_no);
+					temp.push(this.rev);
+					temp.push(this.supplier);
+					temp.push(this.dr_inv_no);
+					temp.push(this.remarks);
+					temp.push(this.status);
+
+					final.push(temp);
+
+					// tr +=
+					// 		"<tr align='center'>" +
+					// 		"<td>" + button + "</td>" +
+					// 		"<td>" + this.control_no + "</td>" +
+					// 		"<td>" + this.part_no + "</td>" +
+					// 		"<td>" + this.rev + "</td>" +
+					// 		"<td>" + this.supplier + "</td>" +
+					// 		"<td>" + this.dr_inv_no + "</td>" +
+					// 		"<td>" + this.remarks + "</td>" +
+					// 		"<td>" + this.status + "</td>" +
+					// 		"</tr>";
 				});
-				$("#tblMonitoringRequest tbody").html(tr);
-				$('#tblMonitoringRequest').DataTable();
+
+				if(final.length == 0)
+				{
+					final = "";
+				}
+
+				$('#tblMonitoringRequest').DataTable({
+					data: final,
+					"columnDefs": [
+				        {"className": "text-center", "targets": "_all"}
+				    ],
+					dom: 'Bfrtip',
+					buttons: [
+						{
+							extend: 'csv',
+							text: "<button class='btn btn-outline-info btn-flat' style='border-radius: 5px;'><i class='fa fa-file-excel'></i> Export</button> ",
+							title: 'IDR - Part No'
+						}
+					]
+					});
+
+				// $("#tblMonitoringRequest tbody").html(tr);
+				// $('#tblMonitoringRequest').DataTable();
 
 			},
 			error: function(jqXHR, errorStatus, errorThrown) 
@@ -256,14 +298,27 @@ var DeliveryReceipt = (function ()
 						var tr = "";
 						$.each(data, function ()
 						{
+							$('#txtAttention').val(this.employee_name);
+
+							var actual = '';
+							var received_by = '';
+							var received_date = '';
+
+							(this.actual == null) ? actual = '' : actual = this.actual;
+							(this.received_by == null) ? received_by = '' : received_by = this.received_by;
+							(this.received_date == null) ? received_date = '' : received_date = this.received_date;
+
 							tr +=
 								"<tr align='center'>" +
 									"<td>" + this.part_no + "</td>" + 
 									"<td>" + this.rev + "</td>" + 
 									"<td>" + this.qty + "</td>" + 
-									"<td>" + this.actual + "</td>" + 
-									"<td>" + this.received_by + "</td>" + 
-									"<td>" + this.received_date + "</td>" + 
+									"<td>" + actual + "</td>" + 
+									"<td>" + this.supplier + "</td>" + 
+									"<td>" + this.dr_inv_no + "</td>" + 
+									"<td>" + this.remarks + "</td>" + 
+									"<td>" + received_by + "</td>" + 
+									"<td>" + received_date + "</td>" + 
 								"</tr>";
 						});
 
@@ -435,14 +490,28 @@ var DeliveryReceipt = (function ()
 						var tr = "";
 						$.each(data, function ()
 						{
+
+							$('#txtAttention').val(this.employee_name);
+
+							var actual = '';
+							var received_by = '';
+							var received_date = '';
+
+							(this.actual == null) ? actual = '' : actual = this.actual;
+							(this.received_by == null) ? received_by = '' : received_by = this.received_by;
+							(this.received_date == null) ? received_date = '' : received_date = this.received_date;
+
 							tr +=
 								"<tr align='center'>" +
 									"<td>" + this.part_no + "</td>" + 
 									"<td>" + this.rev + "</td>" + 
 									"<td>" + this.qty + "</td>" + 
-									"<td>" + this.actual + "</td>" + 
-									"<td>" + this.received_by + "</td>" + 
-									"<td>" + this.received_date + "</td>" + 
+									"<td>" + actual + "</td>" + 
+									"<td>" + this.supplier + "</td>" + 
+									"<td>" + this.dr_inv_no + "</td>" + 
+									"<td>" + this.remarks + "</td>" + 
+									"<td>" + received_by + "</td>" + 
+									"<td>" + received_date + "</td>" + 
 								"</tr>";
 						});
 
