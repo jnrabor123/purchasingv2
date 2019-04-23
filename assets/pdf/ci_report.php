@@ -477,7 +477,9 @@ if($report == "email")
                         <tr>
                             <td style="border: 1px solid #dd4b39; width: 30%"><p>SUPPLIER </p></td>
                             <td style="border: 1px solid #dd4b39; width: 70%"><p align="center">'. $supplier .'</p></td>
-                        </tr>
+                        </tr> 
+
+                        
                     </table>
             ';
 

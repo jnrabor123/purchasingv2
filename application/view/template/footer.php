@@ -60,7 +60,7 @@
 <script src="<?php echo base_url; ?>assets/vendor/datatables.net/js/jquery.dataTables.rowsGroup.js" ></script>
 
 <!-- BUTTON DATATABLES -->
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.flash.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.html5.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url; ?>assets/vendor/datatables.button/buttons.print.min.js"></script>

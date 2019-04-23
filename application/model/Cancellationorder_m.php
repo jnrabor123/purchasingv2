@@ -52,7 +52,7 @@ class Cancellationorder_m extends FDTP_Model
 
 		public function load_generate($code)
 		{
-			$query = "SELECT a.id as id, a.control_no, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status, a.status,
+			$query = "SELECT a.id as id, a.control_no, c.employee_name, a.request_date, a.request_type, a.supplier, a.approved_by_purchasing, a.received_by, a.status, a.status, a.file_upload,
 			b.part_no, b.rev, b.quantity, b.po_no, b.po_code, b.receipt_no, b.prod_code_no, b.delivery_date, b.supplier_answer, b.reason, b.id as id2,
 			c.employee_section
 			FROM tbl_request_slip a

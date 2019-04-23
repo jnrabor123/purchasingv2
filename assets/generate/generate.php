@@ -133,8 +133,11 @@ $code = $_GET["code"];
 			      		</div>
 			      		<div class="col-sm-4 col-md-4 col-lg-4">
 			      			<br/>
+			      			<label class="color-red">ATTACHMENT</label><br/>
+			      			<center><a href="" id="txt_attachment"><span class="fa fa-link"></span> Click Here </a><br/></center>
+
 			      			<label class="color-red">SUPPLIER</label><br/>
-			      			<textarea class="design" rows="5" id="supplier" style="resize: none;" readonly></textarea>
+			      			<textarea class="design" rows="3" id="supplier" style="resize: none;" readonly></textarea>
 			      		</div>
 			      	</div>
 
@@ -318,6 +321,7 @@ $code = $_GET["code"];
 						$('#request_type').val(this.request_type);
 						$('#supplier').val(this.supplier);
 						_section = this.employee_section;
+						document.getElementById("txt_attachment").href = this.file_upload;
 
 						tr +=
 								"<tr align='center'>" +
